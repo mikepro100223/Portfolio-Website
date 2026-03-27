@@ -229,6 +229,16 @@ app.post('/api/upload', authenticateToken, upload.single('file'), (req, res) => 
   res.json({ url: fileUrl, filename: req.file.filename });
 });
 
+// Validate required environment variables
+const REQUIRED_ENV_VARS = ['JWT_SECRET', 'ADMIN_USERNAME', 'ADMIN_PASSWORD'];
+const missingVars = REQUIRED_ENV_VARS.filter(v => !process.env[v]);
+
+if (missingVars.length > 0) {
+  console.error(`❌ Missing required environment variables: ${missingVars.join(', ')}`);
+  console.error('Please ensure your .env file is loaded or environment variables are set.');
+  process.exit(1);
+}
+
 // Start server
 app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
