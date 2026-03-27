@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+
+# Uploads (werden dynamisch erstellt)
+uploads/*.jpg
+uploads/*.png
+uploads/*.gif
+uploads/*.jpeg
+!uploads/.gitkeep
+
+# Environment variables (WICHTIG: nicht committen!)
+.env
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo

@@ -1,0 +1,10 @@
+# Uploads Ordner
+
+Dieser Ordner wird automatisch erstellt wenn Bilder über das Admin Panel hochgeladen werden.
+
+Auf Render.com werden Uploads NICHT persistent gespeichert (Free Tier).
+
+**Empfehlung:** Verwende YouTube Videos statt Bilder für Projekte, oder hoste Bilder auf:
+- Imgur.com
+- Cloudinary.com
+- GitHub (in einem separaten Repository)

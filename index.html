@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mein Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <canvas id="particleCanvas"></canvas>
+    
+    <header>
+        <div class="header-top">
+            <div class="logo-section">
+                <div class="logo-animation">
+                    <span class="logo-icon">💼</span>
+                    <h1 class="gradient-text">Yucan You</h1>
+                </div>
+            </div>
+            <div class="button-section">
+                <button id="themeToggle" class="theme-btn" title="Dark Mode">🌙</button>
+                <button id="langToggle" class="lang-btn" title="English">🇬🇧 EN</button>
+                <a href="admin-login.html" class="admin-login-btn" title="Admin Login">
+                    <i class="fas fa-user-shield"></i>
+                </a>
+            </div>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#home" class="nav-link">Startseite</a></li>
+                <li><a href="#about" class="nav-link">Über mich</a></li>
+                <li><a href="#skills" class="nav-link">Skills</a></li>
+                <li><a href="#projects" class="nav-link">Projekte</a></li>
+                <li><a href="#contact" class="nav-link">Kontakt</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="home" class="hero-section">
+            <div class="hero-content fade-in">
+                <div class="hero-emoji">👋</div>
+                <h2 class="hero-title">Willkommen zu meinem Portfolio</h2>
+                <p class="hero-subtitle">Willkommen auf meiner Portfolio-Website.</p>
+                <div class="hero-cta">
+                    <a href="#projects" class="cta-button primary">Projekte ansehen</a>
+                    <a href="#contact" class="cta-button secondary">Kontakt aufnehmen</a>
+                </div>
+            </div>
+            <div class="scroll-indicator">
+                <span>↓</span>
+            </div>
+        </section>
+
+        <section id="about">
+            <div class="section-header">
+                <h2>Über mich</h2>
+                <div class="section-divider"></div>
+            </div>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>Erzähle deine Geschichte hier.</p>
+                    <p class="highlight-text">Ich bin ein leidenschaftlicher Entwickler mit einer Vorliebe für schönes Design und sauberen Code.</p>
+                </div>
+                <div class="about-stats">
+                    <div class="stat-card">
+                        <div class="stat-number" data-target="10">0</div>
+                        <div class="stat-label">Projekte</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" data-target="5">0</div>
+                        <div class="stat-label">Technologien</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" data-target="100">0</div>
+                        <div class="stat-label">Commits</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="skills">
+            <div class="section-header">
+                <h2>Skills & Technologien</h2>
+                <div class="section-divider"></div>
+            </div>
+            <div class="skills-grid">
+                <div class="skill-card">
+                    <div class="skill-icon">🎨</div>
+                    <h3>Frontend</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag">HTML</span>
+                        <span class="skill-tag">CSS</span>
+                        <span class="skill-tag">JavaScript</span>
+                        <span class="skill-tag">React</span>
+                    </div>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon">⚙️</div>
+                    <h3>Backend</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Node.js</span>
+                        <span class="skill-tag">Python</span>
+                        <span class="skill-tag">SQL</span>
+                        <span class="skill-tag">MongoDB</span>
+                    </div>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon">🛠️</div>
+                    <h3>Tools</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Git</span>
+                        <span class="skill-tag">VS Code</span>
+                        <span class="skill-tag">Figma</span>
+                        <span class="skill-tag">Docker</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects">
+            <div class="section-header">
+                <h2>Projekte</h2>
+                <div class="section-divider"></div>
+            </div>
+            <div class="projects-grid">
+                <!-- Projekte werden dynamisch aus der API geladen -->
+            </div>
+        </section>
+
+        <section id="contact">
+            <div class="section-header">
+                <h2>Kontakt</h2>
+                <div class="section-divider"></div>
+            </div>
+            <p class="contact-intro">Nimm Kontakt mit mir auf.</p>
+            <div class="contact-info">
+                <div class="contact-item">
+                    <div class="contact-icon">📧</div>
+                    <h3>Email</h3>
+                    <p><a href="mailto:yucan.you100223@outlook.de">yucan.you100223@outlook.de</a></p>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">📱</div>
+                    <h3>Telefon</h3>
+                    <p><a href="tel:+41787136541">+41 78 713 65 41</a></p>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">📍</div>
+                    <h3>Adresse</h3>
+                    <p>Yucan You<br>Trieschäckerstrasse 82<br>5032 Aarau Rohr, Schweiz</p>
+                </div>
+            </div>
+            <div class="social-links">
+                <a href="https://github.com/mikepro100223" target="_blank" class="social-link" title="GitHub">
+                    <i class="fab fa-github"></i>
+                </a>
+                <a href="https://www.linkedin.com/in/yucan-you-121034395/" target="_blank" class="social-link" title="LinkedIn">
+                    <i class="fab fa-linkedin"></i>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Yucan You</p>
+    </footer>
+
+    <div id="projectModal" class="modal">
+        <div class="modal-content">
+            <div id="projectDetail"></div>
+        </div>
+    </div>
+    
+    <div id="skillModal" class="modal">
+        <div class="modal-content">
+            <div id="skillDetail"></div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
