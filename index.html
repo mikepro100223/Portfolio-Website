@@ -10,33 +10,34 @@
 <body>
     <canvas id="particleCanvas"></canvas>
     
-    <header>
-        <div class="header-top">
-            <div class="logo-section">
-                <div class="logo-animation">
-                    <span class="logo-icon">💼</span>
-                    <h1 class="gradient-text">Yucan You</h1>
-                </div>
-            </div>
-            <div class="button-section">
-                <button id="themeToggle" class="theme-btn" title="Dark Mode">🌙</button>
-                <button id="langToggle" class="lang-btn" title="English">🇬🇧 EN</button>
-                <a href="admin-login.html" class="admin-login-btn" title="Admin Login">
-                    <i class="fas fa-user-shield"></i>
-                </a>
-            </div>
-        </div>
-        <nav>
-            <ul>
-                <li><a href="#home" class="nav-link">Startseite</a></li>
-                <li><a href="#about" class="nav-link">Über mich</a></li>
-                <li><a href="#skills" class="nav-link">Skills</a></li>
-                <li><a href="#projects" class="nav-link">Projekte</a></li>
-                <li><a href="#contact" class="nav-link">Kontakt</a></li>
-            </ul>
-        </nav>
-    </header>
+    <!-- SVG Liquid Glass Filter -->
+    <svg style="display:none;">
+      <defs>
+                <filter id="liquid-glass-filter" x="-100%" y="-100%" width="300%" height="300%" color-interpolation-filters="sRGB">
+                    <feturbulence type="fractalNoise" basefrequency="0.02" numoctaves="3" result="noise" seed="2" />
+                    <fedisplacementmap in="SourceGraphic" in2="noise" scale="8" xchannelselector="R" ychannelselector="G" />
+        </filter>
+      </defs>
+    </svg>
 
+    <header>
+        <div class="glass-name-container">
+            <div class="name-bubble">Yucan You</div>
+        </div>
+        <div class="glass-indicator" aria-hidden="true"></div>
+        <div class="glass-nav-container">
+            <nav role="navigation" aria-label="Main navigation">
+                <ul>
+                    <li><a href="#home" class="glass-item nav-link">Startseite</a></li>
+                    <li><a href="#about" class="glass-item nav-link">Über mich</a></li>
+                    <li><a href="#skills" class="glass-item nav-link">Skills</a></li>
+                    <li><a href="#projects" class="glass-item nav-link">Projekte</a></li>
+                    <li><a href="#contact" class="glass-item nav-link">Kontakt</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
     <main>
         <section id="home" class="hero-section">
             <div class="hero-content fade-in">
@@ -129,42 +130,35 @@
             </div>
         </section>
 
-        <section id="contact">
-            <div class="section-header">
-                <h2>Kontakt</h2>
-                <div class="section-divider"></div>
-            </div>
-            <p class="contact-intro">Nimm Kontakt mit mir auf.</p>
-            <div class="contact-info">
-                <div class="contact-item">
-                    <div class="contact-icon">📧</div>
-                    <h3>Email</h3>
-                    <p><a href="mailto:yucan.you100223@outlook.de">yucan.you100223@outlook.de</a></p>
-                </div>
-                <div class="contact-item">
-                    <div class="contact-icon">📱</div>
-                    <h3>Telefon</h3>
-                    <p><a href="tel:+41787136541">+41 78 713 65 41</a></p>
-                </div>
-                <div class="contact-item">
-                    <div class="contact-icon">📍</div>
-                    <h3>Adresse</h3>
-                    <p>Yucan You<br>Trieschäckerstrasse 82<br>5032 Aarau Rohr, Schweiz</p>
-                </div>
-            </div>
-            <div class="social-links">
-                <a href="https://github.com/mikepro100223" target="_blank" class="social-link" title="GitHub">
-                    <i class="fab fa-github"></i>
-                </a>
-                <a href="https://www.linkedin.com/in/yucan-you-121034395/" target="_blank" class="social-link" title="LinkedIn">
-                    <i class="fab fa-linkedin"></i>
-                </a>
-            </div>
-        </section>
     </main>
 
-    <footer>
+    <footer id="contact">
         <p>&copy; 2026 Yucan You</p>
+        <div class="footer-contact">
+            <div class="contact-item">
+                <div class="contact-icon">📧</div>
+                <h3>Email</h3>
+                <p><a href="mailto:yucan.you100223@outlook.de">yucan.you100223@outlook.de</a></p>
+            </div>
+            <div class="contact-item">
+                <div class="contact-icon">📱</div>
+                <h3>Telefon</h3>
+                <p><a href="tel:+41787136541">+41 78 713 65 41</a></p>
+            </div>
+            <div class="contact-item">
+                <div class="contact-icon">📍</div>
+                <h3>Adresse</h3>
+                <p>Yucan You<br>Trieschäckerstrasse 82<br>5032 Aarau Rohr, Schweiz</p>
+            </div>
+        </div>
+        <div class="social-links">
+            <a href="https://github.com/mikepro100223" target="_blank" class="social-link" title="GitHub">
+                <i class="fab fa-github"></i>
+            </a>
+            <a href="https://www.linkedin.com/in/yucan-you-121034395/" target="_blank" class="social-link" title="LinkedIn">
+                <i class="fab fa-linkedin"></i>
+            </a>
+        </div>
     </footer>
 
     <div id="projectModal" class="modal">

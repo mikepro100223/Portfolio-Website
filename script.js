@@ -1,4 +1,43 @@
-const API_URL = '/api';
+const API_CANDIDATES = [
+  '/api',
+  `${window.location.origin}/api`,
+  'http://localhost:3000/api'
+].filter((value, index, array) => value && array.indexOf(value) === index);
+
+let API_URL = API_CANDIDATES[0];
+
+async function fetchWithApiFallback(endpoint, options = {}) {
+  let lastError = null;
+
+  for (const baseUrl of API_CANDIDATES) {
+    try {
+      const response = await fetch(`${baseUrl}${endpoint}`, options);
+      const isLastCandidate = baseUrl === API_CANDIDATES[API_CANDIDATES.length - 1];
+      const contentType = response.headers.get('content-type') || '';
+      const isJsonResponse = contentType.includes('application/json');
+
+      // Skip HTML responses from non-API origins (e.g., live server fallback page).
+      if (!isJsonResponse) {
+        if (!isLastCandidate) {
+          continue;
+        }
+        throw new Error(`Invalid API response from ${baseUrl}`);
+      }
+
+      // If an origin has no backend route, try the next candidate.
+      if ((response.status === 404 || response.status >= 500) && !isLastCandidate) {
+        continue;
+      }
+
+      API_URL = baseUrl;
+      return response;
+    } catch (error) {
+      lastError = error;
+    }
+  }
+
+  throw lastError || new Error('Backend not reachable');
+}
 
 // Dynamic content loaded from API
 let dynamicProjects = [];
@@ -6,6 +45,191 @@ let dynamicSkills = {};
 let dynamicAbout = {};
 let dynamicStats = {};
 let dynamicContact = {};
+
+const SKILL_CARD_INDEX = {
+  frontend: 0,
+  backend: 1,
+  tools: 2,
+};
+
+const TECHNOLOGY_ALIASES = {
+  html5: 'html',
+  css3: 'css',
+  js: 'javascript',
+  'canvas api': 'javascript',
+  canvas: 'javascript',
+  node: 'node.js',
+  vue: 'vue.js',
+  vscode: 'vs code',
+};
+
+const TECHNOLOGY_CATEGORY_HINTS = {
+  html: 'frontend',
+  css: 'frontend',
+  javascript: 'frontend',
+  react: 'frontend',
+  'vue.js': 'frontend',
+  'node.js': 'backend',
+  python: 'backend',
+  sql: 'backend',
+  mongodb: 'backend',
+  flask: 'backend',
+  firebase: 'backend',
+  git: 'tools',
+  figma: 'tools',
+  docker: 'tools',
+  'vs code': 'tools',
+};
+
+function normalizeTechnologyName(value) {
+  return String(value || '').trim().toLowerCase().replace(/\s+/g, ' ');
+}
+
+function getCategorySkills(category) {
+  if (dynamicSkills?.[category]?.skills?.length) {
+    return dynamicSkills[category].skills;
+  }
+
+  return skillDetails?.[category]?.[currentLang]?.skills || [];
+}
+
+function buildTechnologyMap() {
+  const map = new Map();
+
+  ['frontend', 'backend', 'tools'].forEach((category) => {
+    getCategorySkills(category).forEach((skill) => {
+      const name = (skill?.name || '').trim();
+      if (!name) {
+        return;
+      }
+
+      map.set(normalizeTechnologyName(name), { name, category });
+    });
+  });
+
+  Object.entries(TECHNOLOGY_ALIASES).forEach(([alias, canonical]) => {
+    const canonicalEntry = map.get(normalizeTechnologyName(canonical));
+    if (canonicalEntry) {
+      map.set(normalizeTechnologyName(alias), canonicalEntry);
+    }
+  });
+
+  return map;
+}
+
+function resolveProjectTechnology(techName, technologyMap) {
+  let normalized = normalizeTechnologyName(techName);
+  if (!normalized) {
+    return null;
+  }
+
+  if (TECHNOLOGY_ALIASES[normalized]) {
+    normalized = normalizeTechnologyName(TECHNOLOGY_ALIASES[normalized]);
+  }
+
+  const directMatch = technologyMap.get(normalized);
+  if (directMatch) {
+    return directMatch;
+  }
+
+  const hintedCategory = TECHNOLOGY_CATEGORY_HINTS[normalized];
+  if (hintedCategory) {
+    const skillMatch = getCategorySkills(hintedCategory).find((skill) =>
+      normalizeTechnologyName(skill?.name) === normalized
+    );
+
+    return {
+      name: skillMatch?.name || String(techName).trim(),
+      category: hintedCategory,
+    };
+  }
+
+  for (const [key, value] of technologyMap.entries()) {
+    if (key.includes(normalized) || normalized.includes(key)) {
+      return value;
+    }
+  }
+
+  return null;
+}
+
+function getLinkedProjectTechnologies(technologies) {
+  if (!Array.isArray(technologies) || technologies.length === 0) {
+    return [];
+  }
+
+  const technologyMap = buildTechnologyMap();
+  const result = [];
+  const seen = new Set();
+
+  technologies.forEach((techName) => {
+    const resolved = resolveProjectTechnology(techName, technologyMap);
+    if (!resolved) {
+      return;
+    }
+
+    const dedupeKey = `${normalizeTechnologyName(resolved.name)}::${resolved.category}`;
+    if (seen.has(dedupeKey)) {
+      return;
+    }
+
+    seen.add(dedupeKey);
+    result.push(resolved);
+  });
+
+  return result;
+}
+
+function renderProjectTechnologyTags(technologies) {
+  const linkedTechnologies = getLinkedProjectTechnologies(technologies);
+
+  return linkedTechnologies
+    .map(
+      (item) =>
+        `<button type="button" class="tech-tag tech-tag-link" data-skill-category="${item.category}">${item.name}</button>`
+    )
+    .join('');
+}
+
+function navigateToSkillCategory(category) {
+  const skillsSection = document.getElementById('skills');
+  if (!skillsSection) {
+    return;
+  }
+
+  closeProjectDetail();
+
+  const headerHeight = document.querySelector('header')?.offsetHeight || 70;
+  const targetTop = skillsSection.getBoundingClientRect().top + window.pageYOffset - headerHeight - 10;
+  window.scrollTo({ top: targetTop, behavior: 'smooth' });
+
+  const targetIndex = SKILL_CARD_INDEX[category];
+  if (typeof targetIndex !== 'number') {
+    return;
+  }
+
+  const skillCards = document.querySelectorAll('.skill-card');
+  const targetCard = skillCards[targetIndex];
+  if (!targetCard) {
+    return;
+  }
+
+  targetCard.classList.add('tech-focus');
+  setTimeout(() => {
+    targetCard.classList.remove('tech-focus');
+  }, 1500);
+}
+
+function attachTechnologyTagListeners(rootElement = document) {
+  rootElement.querySelectorAll('.tech-tag-link').forEach((tag) => {
+    tag.addEventListener('click', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      const category = tag.getAttribute('data-skill-category');
+      navigateToSkillCategory(category);
+    });
+  });
+}
 
 const translations = {
   de: {
@@ -182,7 +406,7 @@ const projectDetails = {
 };
 
 let currentLang = "de";
-let isDarkMode = localStorage.getItem("darkMode") === "true";
+let isDarkMode = true; // Always dark mode
 let currentProject = null;
 let currentSkill = null;
 
@@ -507,18 +731,173 @@ function animateCounters() {
   });
 }
 
-function toggleDarkMode() {
-  isDarkMode = !isDarkMode;
-  localStorage.setItem("darkMode", isDarkMode);
-  document.body.classList.toggle("dark-mode");
-  updateThemeButton();
+// Dark mode is preserved via `body.dark-mode` state and `isDarkMode` variable.
+// UI toggles have been removed; dark mode can still be set by `isDarkMode` value in localStorage.
+
+function updateNavProgress() {
+  const navLinks = Array.from(document.querySelectorAll("nav .nav-link"));
+  if (!navLinks.length) return;
+
+  const navList = navLinks[0].closest("ul");
+  if (!navList) return;
+
+  const sections = navLinks.map((link) => {
+    const href = link.getAttribute("href");
+    if (!href || !href.startsWith("#")) return null;
+    return document.querySelector(href);
+  });
+
+  if (!sections[0]) return;
+
+  const header = document.querySelector("header");
+  const headerOffset = header ? header.offsetHeight : 70;
+  const markerY = window.scrollY + headerOffset + 12;
+
+  let currentIndex = 0;
+  sections.forEach((section, index) => {
+    if (section && markerY >= section.offsetTop) {
+      currentIndex = index;
+    }
+  });
+
+  const nextIndex = Math.min(currentIndex + 1, sections.length - 1);
+  let sectionProgress = 0;
+
+  if (nextIndex !== currentIndex && sections[currentIndex] && sections[nextIndex]) {
+    const startTop = sections[currentIndex].offsetTop;
+    const endTop = sections[nextIndex].offsetTop;
+    if (endTop > startTop) {
+      sectionProgress = Math.min(Math.max((markerY - startTop) / (endTop - startTop), 0), 1);
+    }
+  }
+
+  const navRect = navList.getBoundingClientRect();
+  const centers = navLinks.map((link) => {
+    const rect = link.getBoundingClientRect();
+    return (rect.left - navRect.left) + rect.width / 2;
+  });
+
+  const startCenter = centers[currentIndex] ?? 0;
+  const endCenter = centers[nextIndex] ?? startCenter;
+  const fillWidth = startCenter + ((endCenter - startCenter) * sectionProgress);
+
+  navList.style.setProperty("--nav-progress-width", `${Math.max(fillWidth, 0)}px`);
+
+  navLinks.forEach((link, index) => {
+    link.classList.toggle("active", index === currentIndex);
+  });
 }
 
-function updateThemeButton() {
-  const btn = document.getElementById("themeToggle");
-  btn.textContent = isDarkMode ? "☀️" : "🌙";
-  btn.title = isDarkMode ? "Light Mode" : "Dark Mode";
+/* Glass droplet indicator that follows the active nav item */
+let hoveredGlassTarget = null;
+
+function updateGlassIndicator() {
+  const header = document.querySelector('header');
+  const indicator = document.querySelector('.glass-indicator');
+  const navLinks = Array.from(document.querySelectorAll('.glass-nav-container .nav-link'));
+  if (!header || !indicator || navLinks.length === 0) return;
+
+  const headerOffset = header ? header.offsetHeight : 70;
+  const markerY = window.scrollY + headerOffset + 12;
+
+  let currentIndex = 0;
+  navLinks.forEach((link, index) => {
+    const href = link.getAttribute('href');
+    if (!href || !href.startsWith('#')) return;
+    const section = document.querySelector(href);
+    if (!section) return;
+    const sectionTop = section.getBoundingClientRect().top + window.pageYOffset;
+    if (markerY >= sectionTop) {
+      currentIndex = index;
+    }
+  });
+
+  const targetElement = hoveredGlassTarget && header.contains(hoveredGlassTarget)
+    ? hoveredGlassTarget
+    : navLinks[currentIndex];
+  if (!targetElement) return;
+
+  const headerRect = header.getBoundingClientRect();
+  const targetRect = targetElement.getBoundingClientRect();
+
+  const targetCenterX = (targetRect.left - headerRect.left) + targetRect.width / 2;
+  const targetCenterY = (targetRect.top - headerRect.top) + targetRect.height / 2;
+
+  const paddingX = 20;
+  const paddingY = 10;
+  const newWidth = Math.max(targetRect.width + paddingX * 2, 44);
+  const newHeight = Math.max(targetRect.height + paddingY * 2, 36);
+
+  indicator.style.width = `${newWidth}px`;
+  indicator.style.height = `${newHeight}px`;
+  indicator.style.left = `${targetCenterX}px`;
+  indicator.style.top = `${targetCenterY}px`;
+  indicator.style.borderRadius = `${newHeight / 2}px`;
+
+  // Update active classes for links
+  navLinks.forEach((l, i) => l.classList.toggle('active', i === currentIndex));
+
+  // choose a color for the active item (can be tuned per index or per section)
+  const colors = ['rgba(255,255,255,0.30)', 'rgba(255,255,255,0.26)', 'rgba(255,255,255,0.24)', 'rgba(255,255,255,0.22)', 'rgba(255,255,255,0.20)'];
+  const color = colors[currentIndex % colors.length];
+  indicator.style.setProperty('--indicator-color', color);
+  header.style.setProperty('--indicator-color', color);
 }
+
+function bindGlassHoverTargets() {
+  const header = document.querySelector('header');
+  const navLinks = Array.from(document.querySelectorAll('.glass-nav-container .nav-link'));
+  const hoverTargets = navLinks.filter(Boolean);
+
+  hoverTargets.forEach((target) => {
+    target.addEventListener('pointerenter', () => {
+      hoveredGlassTarget = target;
+      updateGlassIndicator();
+    });
+
+    target.addEventListener('pointerleave', () => {
+      if (hoveredGlassTarget === target) {
+        hoveredGlassTarget = null;
+      }
+      updateGlassIndicator();
+    });
+  });
+
+  if (header) {
+    header.addEventListener('pointerleave', () => {
+      hoveredGlassTarget = null;
+      updateGlassIndicator();
+    });
+  }
+}
+
+// Smooth scroll for center nav links
+document.addEventListener('click', (e) => {
+  const target = e.target.closest('.glass-nav-container .nav-link');
+  if (!target) return;
+  e.preventDefault();
+  const href = target.getAttribute('href');
+  if (!href || !href.startsWith('#')) return;
+  const section = document.querySelector(href);
+  if (!section) return;
+  const header = document.querySelector('header');
+  const headerHeight = header ? header.offsetHeight : 70;
+  const top = section.getBoundingClientRect().top + window.pageYOffset - headerHeight - 8;
+  window.scrollTo({ top, behavior: 'smooth' });
+});
+
+window.addEventListener('scroll', () => {
+  updateGlassIndicator();
+  updateNavProgress();
+});
+
+window.addEventListener('resize', () => updateGlassIndicator());
+
+document.addEventListener('DOMContentLoaded', () => {
+  bindGlassHoverTargets();
+  updateGlassIndicator();
+  updateNavProgress();
+});
 
 
 function setLanguage(lang) {
@@ -531,11 +910,6 @@ function setLanguage(lang) {
   if (headerH1) headerH1.textContent = translations[lang].header;
   
   // Update language button
-  const langBtn = document.getElementById("langToggle");
-  if (langBtn) {
-    langBtn.textContent = translations[lang].langBtn;
-    langBtn.title = lang === "de" ? "English" : "Deutsch";
-  }
   
   // Navigation
   const navLinks = document.querySelectorAll("nav a");
@@ -636,6 +1010,9 @@ function setLanguage(lang) {
   if (currentProject) {
     showProjectDetail(currentProject);
   }
+
+  // Recalculate nav marker after label widths change.
+  requestAnimationFrame(updateNavProgress);
 }
 
 function showProjectDetail(projectId) {
@@ -678,6 +1055,8 @@ function showProjectDetail(projectId) {
     </div>
   ` : '';
 
+  const technologyTags = renderProjectTechnologyTags(project.technologies || []);
+
   detailContainer.innerHTML = `
     <div class="project-detail-header">
       <button class="back-button" onclick="closeProjectDetail()">${
@@ -690,16 +1069,14 @@ function showProjectDetail(projectId) {
       <p class="project-full-desc">${project.fullDesc}</p>
       ${actionButtons}
       <div class="project-meta">
+        ${technologyTags ? `
         <div class="meta-item">
           <h4>${translations[currentLang].technologies}</h4>
           <div class="tech-tags">
-            ${project.technologies
-              .map(
-                (tech) => `<span class="tech-tag">${tech}</span>`
-              )
-              .join("")}
+            ${technologyTags}
           </div>
         </div>
+        ` : ''}
         <div class="meta-item">
           <h4>${translations[currentLang].duration}</h4>
           <p>${project.duration}</p>
@@ -708,6 +1085,8 @@ function showProjectDetail(projectId) {
       </div>
     </div>
   `;
+
+  attachTechnologyTagListeners(detailContainer);
 
   modal.style.display = "flex";
   document.body.style.overflow = "hidden";
@@ -771,7 +1150,7 @@ function closeSkillDetail() {
 // ===== LOAD DYNAMIC CONTENT FROM API =====
 async function loadContentFromAPI() {
   try {
-    const response = await fetch(`${API_URL}/content`);
+    const response = await fetchWithApiFallback('/content');
     if (!response.ok) {
       console.warn('API not available, using static content');
       return;
@@ -880,6 +1259,7 @@ function updateProjectCards() {
   projectsGrid.innerHTML = dynamicProjects.map((project, index) => {
     const lang = currentLang;
     const projectData = project[lang] || project.de || {};
+    const technologyTags = renderProjectTechnologyTags(project.technologies || []);
     
     return `
       <div class="project-card" data-project-id="${project.id}" style="cursor: pointer;">
@@ -888,12 +1268,15 @@ function updateProjectCards() {
           '📁'}</div>
         <h3>${projectData.title || 'Projekt'}</h3>
         <p>${projectData.shortDesc || ''}</p>
+        ${technologyTags ? `<div class="project-card-tech">${technologyTags}</div>` : ''}
         <a href="#" class="project-link">
           ${translations[lang].learnMore} <span class="arrow">→</span>
         </a>
       </div>
     `;
   }).join('');
+
+  attachTechnologyTagListeners(projectsGrid);
   
   // Re-attach event listeners
   document.querySelectorAll('.project-card').forEach((card, index) => {
@@ -987,6 +1370,8 @@ function showDynamicProject(project) {
       </a>` : ''}
     </div>
   ` : '';
+
+  const technologyTags = renderProjectTechnologyTags(project.technologies || []);
   
   detailContainer.innerHTML = `
     <div class="project-detail-header">
@@ -998,11 +1383,11 @@ function showDynamicProject(project) {
       <p class="project-full-desc">${projectData.fullDesc || ''}</p>
       ${actionButtons}
       <div class="project-meta">
-        ${project.technologies ? `
+        ${technologyTags ? `
           <div class="meta-item">
             <h4>${translations[lang].technologies}</h4>
             <div class="tech-tags">
-              ${project.technologies.map(tech => `<span class="tech-tag">${tech}</span>`).join('')}
+              ${technologyTags}
             </div>
           </div>
         ` : ''}
@@ -1016,6 +1401,8 @@ function showDynamicProject(project) {
       </div>
     </div>
   `;
+
+  attachTechnologyTagListeners(detailContainer);
   
   modal.style.display = "flex";
   document.body.style.overflow = "hidden";
@@ -1033,30 +1420,14 @@ document.addEventListener("DOMContentLoaded", function () {
   // Initialize scroll reveal
   window.addEventListener('scroll', revealOnScroll);
   revealOnScroll();
+
+  // Navigation progress marker
+  window.addEventListener('scroll', updateNavProgress, { passive: true });
+  window.addEventListener('resize', updateNavProgress);
+  window.addEventListener('load', updateNavProgress);
   
   // Initialize counter animations
   animateCounters();
-  
-  // Dark Mode Toggle
-  const themeBtn = document.getElementById("themeToggle");
-  console.log("Theme button found:", themeBtn);
-  if (themeBtn) {
-    themeBtn.addEventListener("click", function() {
-      console.log("Theme button clicked!");
-      toggleDarkMode();
-    });
-  }
-  
-  // Language Toggle
-  const langBtn = document.getElementById("langToggle");
-  console.log("Lang button found:", langBtn);
-  if (langBtn) {
-    langBtn.addEventListener("click", function () {
-      console.log("Lang button clicked!");
-      const newLang = currentLang === "de" ? "en" : "de";
-      setLanguage(newLang);
-    });
-  }
   
   // Project cards interaction - initial setup
   attachProjectCardListeners();
@@ -1099,6 +1470,7 @@ document.addEventListener("DOMContentLoaded", function () {
           top: 0,
           behavior: 'smooth'
         });
+        setTimeout(updateNavProgress, 120);
         return;
       }
       
@@ -1112,6 +1484,7 @@ document.addEventListener("DOMContentLoaded", function () {
           top: offsetPosition,
           behavior: 'smooth'
         });
+        setTimeout(updateNavProgress, 120);
       }
     });
   });
@@ -1121,14 +1494,14 @@ document.addEventListener("DOMContentLoaded", function () {
     particleSystem.resize();
   });
   
-  // Initialize dark mode
+  // Initialize dark mode (no UI toggle)
   if (isDarkMode) {
     document.body.classList.add("dark-mode");
   }
-  updateThemeButton();
   
-  // Initialize language
+  // Initialize language (default)
   setLanguage(currentLang);
+  updateNavProgress();
 });
 
 // Escape key to close modals

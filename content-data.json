@@ -171,6 +171,10 @@
         {
           "name": "Docker",
           "level": "Grundlagen"
+        },
+        {
+          "name": "Visual Studio 2022",
+          "level": "Mittel"
         }
       ]
     }
@@ -186,9 +190,9 @@
     }
   },
   "stats": {
-    "projects": 100,
-    "technologies": 50,
-    "commits": 1000
+    "projects": 10,
+    "technologies": 67,
+    "commits": 100
   },
   "contact": {
     "email": "",
