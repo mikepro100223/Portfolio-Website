@@ -786,10 +786,10 @@ function updateGlassIndicator() {
   const targetCenterX = (targetRect.left - headerRect.left) + targetRect.width / 2;
   const targetCenterY = (targetRect.top - headerRect.top) + targetRect.height / 2;
 
-  const paddingX = 24;
-  const paddingY = 12;
-  const newWidth = Math.max(targetRect.width + paddingX * 2, 44);
-  const newHeight = Math.max(targetRect.height + paddingY * 2, 36);
+  const paddingX = 8;
+  const paddingY = 6;
+  const newWidth = Math.max(targetRect.width + paddingX * 2, 28);
+  const newHeight = Math.max(targetRect.height + paddingY * 2, 28);
 
   indicator.style.width = `${newWidth}px`;
   indicator.style.height = `${newHeight}px`;
