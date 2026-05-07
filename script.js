@@ -198,7 +198,7 @@ const translations = {
     heroSubtitle: "Willkommen auf meiner Portfolio-Website.",
     ctaPrimary: "Projekte ansehen",
     ctaSecondary: "Kontakt aufnehmen",
-    aboutText: "Erzähle deine Geschichte hier.",
+    //aboutText: "Erzähle deine Geschichte hier.",
     aboutHighlight: "Ich bin ein leidenschaftlicher Entwickler mit einer Vorliebe für schönes Design und sauberen Code.",
     projectsText: "Präsentiere deine Projekte hier.",
     contactText: "Nimm Kontakt mit mir auf.",
@@ -375,13 +375,13 @@ const skillDetails = {
           name: "HTML",
           level: "Fortgeschritten",
           description: "HTML (HyperText Markup Language) ist die Grundstruktur jeder Webseite. Es definiert den Inhalt und die Hierarchie von Elementen wie Überschriften, Absätzen, Bildern und Links.",
-          experience: "3+ Jahre"
+          experience: "2+ Jahre"
         },
         {
           name: "CSS",
           level: "Fortgeschritten",
           description: "CSS (Cascading Style Sheets) ist für das visuelle Styling verantwortlich. Damit gestalte ich Layouts, Farben, Animationen und responsive Designs, die auf allen Geräten funktionieren.",
-          experience: "3+ Jahre"
+          experience: "2+ Jahre"
         },
         {
           name: "JavaScript",
@@ -439,25 +439,38 @@ const skillDetails = {
           name: "Node.js",
           level: "Fortgeschritten",
           description: "Node.js ermöglicht die Ausführung von JavaScript auf dem Server. Damit kann ich serverseitige Anwendungen, REST APIs und Real-time Services entwickeln.",
-          experience: "2+ Jahre"
+          experience: "1+ Jahre"
         },
         {
           name: "Python",
           level: "Mittel",
           description: "Python ist eine vielseitige Programmiersprache, die ich für Backend-Entwicklung, Datenanalyse und Automatisierung einsetze. Sie ist bekannt für ihre Lesbarkeit und Effizienz.",
-          experience: "2+ Jahre"
+          experience: "1+ Jahre"
         },
         {
           name: "SQL",
           level: "Mittel",
           description: "SQL (Structured Query Language) ist die Sprache für relationale Datenbanken. Damit kann ich Daten effizient abfragen, speichern und verwalten.",
-          experience: "1+ Jahre"
+          experience: "2+ Jahre"
         },
         {
           name: "MongoDB",
           level: "Grundlagen",
           description: "MongoDB ist eine NoSQL-Datenbank, die Daten in flexiblen JSON-ähnlichen Dokumenten speichert. Ideal für moderne, skalierbare Anwendungen.",
-          experience: "1 Jahr"
+          experience: "<1 Jahr"
+        }
+        ,
+        {
+          name: "C#",
+          level: "Mittel",
+          description: "C# ist eine leistungsfähige, statisch typisierte Sprache für Anwendungen unter .NET — ideal für Backend, APIs und Desktop-Anwendungen.",
+          experience: "2+ Jahre"
+        },
+        {
+          name: ".NET",
+          level: "Mittel",
+          description: ".NET ist die Laufzeitplattform für C#-Anwendungen; verwendet für serverseitige Dienste, APIs und Cross-Platform-Apps.",
+          experience: "1+ Jahre"
         }
       ]
     },
@@ -490,6 +503,19 @@ const skillDetails = {
           description: "MongoDB is a NoSQL database that stores data in flexible JSON-like documents. Ideal for modern, scalable applications.",
           experience: "1 year"
         }
+        ,
+        {
+          name: "C#",
+          level: "Intermediate",
+          description: "C# is a powerful, statically typed language used with .NET for backend, APIs and desktop applications.",
+          experience: "1+ year"
+        },
+        {
+          name: ".NET",
+          level: "Intermediate",
+          description: ".NET is the runtime/platform for C# applications; used for server-side services, APIs and cross-platform apps.",
+          experience: "1+ year"
+        }
       ]
     }
   },
@@ -521,7 +547,14 @@ const skillDetails = {
           name: "Docker",
           level: "Grundlagen",
           description: "Docker ermöglicht die Containerisierung von Anwendungen. Das sorgt für konsistente Entwicklungs- und Produktionsumgebungen.",
-          experience: "1 Jahr"
+          experience: "1+ Jahr"
+        }
+        ,
+        {
+          name: "Powershell",
+          level: "Mittel",
+          description: "Powershell nutze ich für Automatisierung, DevOps-Skripte und Systemadministration unter Windows und cross-platform mit PowerShell Core.",
+          experience: "2+ Jahre"
         }
       ]
     },
@@ -553,6 +586,13 @@ const skillDetails = {
           level: "Beginner",
           description: "Docker enables containerization of applications. This ensures consistent development and production environments.",
           experience: "1 year"
+        }
+        ,
+        {
+          name: "Powershell",
+          level: "Intermediate",
+          description: "I use PowerShell for automation, DevOps scripts and system administration on Windows and cross-platform with PowerShell Core.",
+          experience: "1+ year"
         }
       ]
     }
