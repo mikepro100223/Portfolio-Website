@@ -1,50 +1,8 @@
-const API_CANDIDATES = [
-  '/api',
-  `${window.location.origin}/api`,
-  'http://localhost:3000/api'
-].filter((value, index, array) => value && array.indexOf(value) === index);
-
-let API_URL = API_CANDIDATES[0];
-
-async function fetchWithApiFallback(endpoint, options = {}) {
-  let lastError = null;
-
-  for (const baseUrl of API_CANDIDATES) {
-    try {
-      const response = await fetch(`${baseUrl}${endpoint}`, options);
-      const isLastCandidate = baseUrl === API_CANDIDATES[API_CANDIDATES.length - 1];
-      const contentType = response.headers.get('content-type') || '';
-      const isJsonResponse = contentType.includes('application/json');
-
-      // Skip HTML responses from non-API origins (e.g., live server fallback page).
-      if (!isJsonResponse) {
-        if (!isLastCandidate) {
-          continue;
-        }
-        throw new Error(`Invalid API response from ${baseUrl}`);
-      }
-
-      // If an origin has no backend route, try the next candidate.
-      if ((response.status === 404 || response.status >= 500) && !isLastCandidate) {
-        continue;
-      }
-
-      API_URL = baseUrl;
-      return response;
-    } catch (error) {
-      lastError = error;
-    }
-  }
-
-  throw lastError || new Error('Backend not reachable');
-}
+// Static, single-page site — no backend or database.
+// All content is provided locally via `projectDetails` and `skillDetails` objects.
 
 // Dynamic content loaded from API
-let dynamicProjects = [];
-let dynamicSkills = {};
-let dynamicAbout = {};
-let dynamicStats = {};
-let dynamicContact = {};
+// No dynamic backend content — keep static data only
 
 const SKILL_CARD_INDEX = {
   frontend: 0,
@@ -86,10 +44,6 @@ function normalizeTechnologyName(value) {
 }
 
 function getCategorySkills(category) {
-  if (dynamicSkills?.[category]?.skills?.length) {
-    return dynamicSkills[category].skills;
-  }
-
   return skillDetails?.[category]?.[currentLang]?.skills || [];
 }
 
@@ -790,11 +744,6 @@ function updateNavProgress() {
 
 /* Glass droplet indicator that follows the active nav item */
 let hoveredGlassTarget = null;
-let lastScrollIndex = -1;
-let bounceScrollTimeout = null;
-let lastGlobalScrollY = window.scrollY;
-let lastGlobalScrollTime = Date.now();
-let currentScrollVelocity = 0;
 
 function updateGlassIndicator() {
   const header = document.querySelector('header');
@@ -804,6 +753,8 @@ function updateGlassIndicator() {
 
   const headerOffset = header ? header.offsetHeight : 70;
   const markerY = window.scrollY + headerOffset + 12;
+  const docHeight = document.documentElement.scrollHeight;
+  const viewportHeight = window.innerHeight;
 
   let currentIndex = 0;
   navLinks.forEach((link, index) => {
@@ -812,7 +763,14 @@ function updateGlassIndicator() {
     const section = document.querySelector(href);
     if (!section) return;
     const sectionTop = section.getBoundingClientRect().top + window.pageYOffset;
+    const sectionBottom = section.getBoundingClientRect().bottom + window.pageYOffset;
+    
     if (markerY >= sectionTop) {
+      currentIndex = index;
+    }
+    
+    // Special handling for last section (Kontakt/Footer): if near bottom, select it
+    if (index === navLinks.length - 1 && window.scrollY + viewportHeight >= docHeight - 100) {
       currentIndex = index;
     }
   });
@@ -828,8 +786,8 @@ function updateGlassIndicator() {
   const targetCenterX = (targetRect.left - headerRect.left) + targetRect.width / 2;
   const targetCenterY = (targetRect.top - headerRect.top) + targetRect.height / 2;
 
-  const paddingX = 20;
-  const paddingY = 10;
+  const paddingX = 24;
+  const paddingY = 12;
   const newWidth = Math.max(targetRect.width + paddingX * 2, 44);
   const newHeight = Math.max(targetRect.height + paddingY * 2, 36);
 
@@ -837,163 +795,38 @@ function updateGlassIndicator() {
   indicator.style.height = `${newHeight}px`;
   indicator.style.left = `${targetCenterX}px`;
   indicator.style.top = `${targetCenterY}px`;
-
-  // Read desired radius from CSS variable (matches name-bubble)
-  const rootStyles = window.getComputedStyle(document.documentElement);
-  const cssRadiusRaw = rootStyles.getPropertyValue('--glass-radius');
-  const cssRadius = cssRadiusRaw ? parseFloat(cssRadiusRaw) : null;
-  const computedRadius = cssRadius ? Math.min(cssRadius, newHeight / 2) : newHeight / 2;
-  indicator.style.borderRadius = `${computedRadius}px`;
-
-  // Update active classes for links (visual active state for keyboard/scroll)
-  navLinks.forEach((l, i) => l.classList.toggle('active', i === currentIndex));
-
-  // Ensure only the element currently under the indicator has the overlay highlight class
-  navLinks.forEach((l) => l.classList.remove('overlay-highlight'));
-  if (targetElement && targetElement.classList) {
-    targetElement.classList.add('overlay-highlight');
-  }
+  indicator.style.borderRadius = `${newHeight / 2}px`;
 
   // choose a color for the active item (can be tuned per index or per section)
   const colors = ['rgba(255,255,255,0.30)', 'rgba(255,255,255,0.26)', 'rgba(255,255,255,0.24)', 'rgba(255,255,255,0.22)', 'rgba(255,255,255,0.20)'];
   const color = colors[currentIndex % colors.length];
   indicator.style.setProperty('--indicator-color', color);
   header.style.setProperty('--indicator-color', color);
-
-  // Bounce-Effekt wenn ganz nach oben/unten gescrollt wird (nur bei schnellem Scrollen)
-  const isFastScroll = currentScrollVelocity > 2;
-
-  if (currentIndex !== lastScrollIndex && lastScrollIndex !== -1 && !hoveredGlassTarget && isFastScroll) {
-    if (currentIndex === 0) {
-      indicator.classList.add('bounce-left');
-      clearTimeout(bounceScrollTimeout);
-      bounceScrollTimeout = setTimeout(() => indicator.classList.remove('bounce-left'), 800);
-    } else if (currentIndex === navLinks.length - 1) {
-      indicator.classList.add('bounce-right');
-      clearTimeout(bounceScrollTimeout);
-      bounceScrollTimeout = setTimeout(() => indicator.classList.remove('bounce-right'), 800);
-    }
-  }
-  lastScrollIndex = currentIndex;
 }
 
 function bindGlassHoverTargets() {
   const header = document.querySelector('header');
   const navLinks = Array.from(document.querySelectorAll('.glass-nav-container .nav-link'));
+  const hoverTargets = navLinks.filter(Boolean);
 
-  // Make overlay follow the pointer anywhere inside the nav container (not only on item centers)
-  const navContainer = document.querySelector('.glass-nav-container');
-  let lastClientX = null;
-  let lastPointerTime = null;
-  let leaveTimeout = null;
+  hoverTargets.forEach((target) => {
+    target.addEventListener('pointerenter', () => {
+      hoveredGlassTarget = target;
+      updateGlassIndicator();
+    });
 
-  if (navContainer) {
-    const handleGlassPointer = (ev) => {
-      clearTimeout(leaveTimeout); // Abbrechen, falls wir doch wieder drüber hovern
-      
-      // find closest nav link under pointer
-      // for touch interactions, document.elementFromPoint can be more reliable than ev.target on move
-      let targetEl = ev.target;
-      if (ev.type === 'touchmove') {
-        const touch = ev.touches[0];
-        targetEl = document.elementFromPoint(touch.clientX, touch.clientY);
-      }
-      
-      const el = targetEl && targetEl.closest ? targetEl.closest('.nav-link') : null;
-      hoveredGlassTarget = el || null;
-
-      // compute a left position relative to header
-      const headerRect = header ? header.getBoundingClientRect() : { left: 0, top: 0 };
-      
-      let clientX = ev.clientX;
-      if (ev.type === 'touchmove' || ev.type === 'touchstart') {
-        clientX = ev.touches[0].clientX;
-      }
-
-      const now = Date.now();
-      let velocityX = 0;
-      if (lastClientX !== null && lastPointerTime !== null && (now - lastPointerTime) > 0) {
-        velocityX = (clientX - lastClientX) / (now - lastPointerTime);
-      }
-      lastClientX = clientX;
-      lastPointerTime = now;
-
-      let rawPointerX = clientX - headerRect.left;
-
-      const indicator = document.querySelector('.glass-indicator');
-      if (!indicator) return;
-
-      const paddingX = 20;
-      let targetWidth = 120;
-      let targetHeight = 44;
-      let pointerX = rawPointerX;
-
-      // if hovering a link, match its size and snap to its center (magnetic effect)
-      if (hoveredGlassTarget) {
-        const rect = hoveredGlassTarget.getBoundingClientRect();
-        const targetCenterX = (rect.left - headerRect.left) + rect.width / 2;
-        
-        // Magnet-Effekt: snappe zur Mitte, aber gib mehr Spielraum für die Maus (erst nah an der Mitte snappen)
-        const distToCenter = Math.abs(rawPointerX - targetCenterX);
-        const snapThreshold = 15; // 15px radius sweet spot for snapping
-
-        if (distToCenter < snapThreshold) {
-          pointerX = targetCenterX; // Snap
-        } else {
-          // Soft pull towards center if outside the sweet spot
-          pointerX = rawPointerX + (targetCenterX - rawPointerX) * 0.15;
-        }
-
-        targetWidth = Math.max(rect.width + paddingX * 2, 44);
-        targetHeight = Math.max(rect.height + 10, 36);
-      }
-
-      // Boundary clamping
-      const containerRect = navContainer.getBoundingClientRect();
-      const minLeftEdge = containerRect.left - headerRect.left + 8; // 8px Puffer zum Rand
-      const maxRightEdge = containerRect.right - headerRect.left - 8;
-
-      let clampedLeftEdge = pointerX - targetWidth / 2;
-      let clampedRightEdge = pointerX + targetWidth / 2;
-
-      // Hit boundary interactions to trigger the same bounce animation as scroll!
-      if (clampedLeftEdge < minLeftEdge) {
-        pointerX = minLeftEdge + targetWidth / 2;
-        // Trigger bounce left if pulling hard
-        if (!indicator.classList.contains('bounce-left') && velocityX < -0.2) {
-          indicator.classList.add('bounce-left');
-          clearTimeout(bounceScrollTimeout);
-          bounceScrollTimeout = setTimeout(() => indicator.classList.remove('bounce-left'), 800);
-        }
-      } else if (clampedRightEdge > maxRightEdge) {
-        pointerX = maxRightEdge - targetWidth / 2;
-        // Trigger bounce right if pulling hard
-        if (!indicator.classList.contains('bounce-right') && velocityX > 0.2) {
-          indicator.classList.add('bounce-right');
-          clearTimeout(bounceScrollTimeout);
-          bounceScrollTimeout = setTimeout(() => indicator.classList.remove('bounce-right'), 800);
-        }
-      }
-
-      indicator.style.width = `${targetWidth}px`;
-      indicator.style.height = `${targetHeight}px`;
-      indicator.style.left = `${pointerX}px`;
-
-      // update highlight class on items
-      navLinks.forEach((l) => l.classList.toggle('overlay-highlight', l === hoveredGlassTarget));
-    };
-
-    navContainer.addEventListener('pointermove', handleGlassPointer);
-    navContainer.addEventListener('pointerdown', handleGlassPointer);
-    navContainer.addEventListener('touchmove', handleGlassPointer, { passive: true });
-    navContainer.addEventListener('touchstart', handleGlassPointer, { passive: true });
-
-    // Clear on leave of nav container with a small delay
-    navContainer.addEventListener('pointerleave', () => {
-      leaveTimeout = setTimeout(() => {
+    target.addEventListener('pointerleave', () => {
+      if (hoveredGlassTarget === target) {
         hoveredGlassTarget = null;
-        updateGlassIndicator();
-      }, 500); // 500ms warten, bevor die Bubble zurück zum aktiven Abschnitt flitzt
+      }
+      updateGlassIndicator();
+    });
+  });
+
+  if (header) {
+    header.addEventListener('pointerleave', () => {
+      hoveredGlassTarget = null;
+      updateGlassIndicator();
     });
   }
 }
@@ -1009,30 +842,12 @@ document.addEventListener('click', (e) => {
   if (!section) return;
   const header = document.querySelector('header');
   const headerHeight = header ? header.offsetHeight : 70;
-  
-  let top = section.getBoundingClientRect().top + window.pageYOffset - headerHeight - 8;
-  
-  // Verhindere, dass weiter als bis zum Ende der Seite gescrollt wird (verhindert weiße Flächen unten)
-  const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-  if (top > maxScroll) {
-    top = maxScroll;
-  }
-
+  const top = section.getBoundingClientRect().top + window.pageYOffset - headerHeight - 8;
   window.scrollTo({ top, behavior: 'smooth' });
 });
 
 window.addEventListener('scroll', () => {
-  const now = Date.now();
-  const deltaY = Math.abs(window.scrollY - lastGlobalScrollY);
-  const deltaT = now - lastGlobalScrollTime;
-  if (deltaT > 0) {
-    currentScrollVelocity = deltaY / deltaT; // px per ms
-  }
-  lastGlobalScrollY = window.scrollY;
-  lastGlobalScrollTime = now;
-
   updateGlassIndicator();
-  updateNavProgress();
 });
 
 window.addEventListener('resize', () => updateGlassIndicator());
@@ -1291,189 +1106,41 @@ function closeSkillDetail() {
   document.body.style.overflow = "auto";
 }
 
-// ===== LOAD DYNAMIC CONTENT FROM API =====
-async function loadContentFromAPI() {
-  try {
-    const response = await fetchWithApiFallback('/content');
-    if (!response.ok) {
-      console.warn('API not available, using static content');
-      return;
-    }
-    
-    const data = await response.json();
-    
-    // Update dynamic data
-    dynamicProjects = data.projects || [];
-    dynamicSkills = data.skills || {};
-    dynamicAbout = data.about || {};
-    dynamicStats = data.stats || {};
-    dynamicContact = data.contact || {};
-    
-    // Update UI with dynamic content
-    updateDynamicContent();
-  } catch (error) {
-    console.warn('Could not load dynamic content:', error);
-  }
-}
-
-function updateDynamicContent() {
-  // Update About section
-  if (dynamicAbout[currentLang]) {
-    const aboutText = document.querySelector("#about .about-text p:first-child");
-    const highlightText = document.querySelector(".highlight-text");
-    
-    if (aboutText && dynamicAbout[currentLang].text) {
-      aboutText.textContent = dynamicAbout[currentLang].text;
-    }
-    if (highlightText && dynamicAbout[currentLang].highlight) {
-      highlightText.textContent = dynamicAbout[currentLang].highlight;
-    }
-  }
-  
-  // Update Stats
-  if (dynamicStats && Object.keys(dynamicStats).length > 0) {
-    const statNumbers = document.querySelectorAll('.stat-number');
-    if (statNumbers[0]) statNumbers[0].setAttribute('data-target', dynamicStats.projects || 10);
-    if (statNumbers[1]) statNumbers[1].setAttribute('data-target', dynamicStats.technologies || 5);
-    if (statNumbers[2]) statNumbers[2].setAttribute('data-target', dynamicStats.commits || 1000);
-    animateCounters(); // Re-animate with new values
-  }
-  
-  // Update Skills cards with dynamic data
-  if (dynamicSkills && Object.keys(dynamicSkills).length > 0) {
-    ['frontend', 'backend', 'tools'].forEach((category, index) => {
-      const skillCard = document.querySelectorAll('.skill-card')[index];
-      if (skillCard && dynamicSkills[category]?.skills) {
-        const skillTagsContainer = skillCard.querySelector('.skill-tags');
-        if (skillTagsContainer) {
-          skillTagsContainer.innerHTML = dynamicSkills[category].skills
-            .map(skill => `<span class="skill-tag">${skill.name}</span>`)
-            .join('');
-        }
-      }
-    });
-  }
-  
-  // Update Projects
-  if (dynamicProjects.length > 0) {
-    updateProjectCards();
-  }
-  
-  // Update Contact
-  if (dynamicContact && Object.keys(dynamicContact).length > 0) {
-    // Email
-    const emailLink = document.querySelector('.contact-item:nth-child(1) p a');
-    if (emailLink && dynamicContact.email) {
-      emailLink.href = `mailto:${dynamicContact.email}`;
-      emailLink.textContent = dynamicContact.email;
-    }
-    
-    // Phone
-    const phoneLink = document.querySelector('.contact-item:nth-child(2) p a');
-    if (phoneLink && dynamicContact.phone) {
-      phoneLink.href = `tel:${dynamicContact.phone.replace(/\s/g, '')}`;
-      phoneLink.textContent = dynamicContact.phone;
-    }
-    
-    // Address
-    const addressP = document.querySelector('.contact-item:nth-child(3) p');
-    if (addressP && dynamicContact.address) {
-      const addr = dynamicContact.address;
-      addressP.innerHTML = `${addr.name || ''}<br>${addr.street || ''}<br>${addr.city || ''}`;
-    }
-    
-    // GitHub
-    const githubLink = document.querySelector('.social-link[title="GitHub"]');
-    if (githubLink && dynamicContact.social?.github) {
-      githubLink.href = dynamicContact.social.github;
-    }
-    
-    // LinkedIn
-    const linkedinLink = document.querySelector('.social-link[title="LinkedIn"]');
-    if (linkedinLink && dynamicContact.social?.linkedin) {
-      linkedinLink.href = dynamicContact.social.linkedin;
-    }
-  }
-}
-
 function updateProjectCards() {
   const projectsGrid = document.querySelector('.projects-grid');
-  if (!projectsGrid || dynamicProjects.length === 0) return;
-  
-  projectsGrid.innerHTML = dynamicProjects.map((project, index) => {
-    const lang = currentLang;
-    const projectData = project[lang] || project.de || {};
-    const technologyTags = renderProjectTechnologyTags(project.technologies || []);
-    
+  if (!projectsGrid) return;
+
+  // Render static projects from `projectDetails` (1-based ids)
+  const ids = Object.keys(projectDetails).sort((a,b) => Number(a) - Number(b));
+
+  projectsGrid.innerHTML = ids.map(id => {
+    const proj = projectDetails[id][currentLang] || projectDetails[id].de || {};
+    const icon = proj.image || '📁';
     return `
-      <div class="project-card" data-project-id="${project.id}" style="cursor: pointer;">
-        <div class="project-icon">${project.imageUrl ? 
-          `<img src="${project.imageUrl}" alt="${projectData.title}" style="width:100%;height:200px;object-fit:cover;border-radius:15px;">` : 
-          '📁'}</div>
-        <h3>${projectData.title || 'Projekt'}</h3>
-        <p>${projectData.shortDesc || ''}</p>
-        ${technologyTags ? `<div class="project-card-tech">${technologyTags}</div>` : ''}
-        <a href="#" class="project-link">
-          ${translations[lang].learnMore} <span class="arrow">→</span>
-        </a>
+      <div class="project-card" data-project-id="${id}" style="cursor: pointer;">
+        <div class="project-icon">${icon}</div>
+        <h3>${proj.title || 'Projekt'}</h3>
+        <p>${proj.shortDesc || ''}</p>
       </div>
     `;
   }).join('');
 
-  attachTechnologyTagListeners(projectsGrid);
-  
-  // Re-attach event listeners
-  document.querySelectorAll('.project-card').forEach((card, index) => {
-    card.addEventListener('click', (e) => {
-      e.preventDefault();
-      showDynamicProject(dynamicProjects[index]);
-    });
-  });
+  attachProjectCardListeners();
 }
 
-// Helper function to attach event listeners to project cards
+// Attach click listeners to static project cards
 function attachProjectCardListeners() {
-  const projectCards = document.querySelectorAll(".project-card");
+  const projectCards = document.querySelectorAll('.project-card');
   projectCards.forEach((card) => {
-    card.style.cursor = "pointer";
-    // Remove old listeners by cloning
+    card.style.cursor = 'pointer';
     const newCard = card.cloneNode(true);
     card.parentNode.replaceChild(newCard, card);
-    
-    newCard.addEventListener("click", function () {
-      const projectId = parseInt(this.getAttribute('data-project-id'));
-      if (projectId && dynamicProjects.length > 0) {
-        const project = dynamicProjects.find(p => p.id === projectId);
-        if (project) {
-          showDynamicProject(project);
-        }
-      } else {
-        // Fallback to index-based for static projects
-        const index = Array.from(document.querySelectorAll('.project-card')).indexOf(this);
-        showProjectDetail(index + 1);
-      }
-    });
-  });
-}
 
-// Helper function to attach event listeners to project cards
-function attachProjectCardListeners() {
-  const projectCards = document.querySelectorAll(".project-card");
-  projectCards.forEach((card) => {
-    card.style.cursor = "pointer";
-    // Remove old listeners by cloning
-    const newCard = card.cloneNode(true);
-    card.parentNode.replaceChild(newCard, card);
-    
-    newCard.addEventListener("click", function () {
+    newCard.addEventListener('click', function () {
       const projectId = parseInt(this.getAttribute('data-project-id'));
-      if (projectId && dynamicProjects.length > 0) {
-        const project = dynamicProjects.find(p => p.id === projectId);
-        if (project) {
-          showDynamicProject(project);
-        }
+      if (projectId) {
+        showProjectDetail(projectId);
       } else {
-        // Fallback to index-based for static projects
         const index = Array.from(document.querySelectorAll('.project-card')).indexOf(this);
         showProjectDetail(index + 1);
       }
@@ -1554,9 +1221,6 @@ function showDynamicProject(project) {
 
 document.addEventListener("DOMContentLoaded", function () {
   console.log("DOM loaded!");
-  
-  // Load dynamic content from API
-  loadContentFromAPI();
   
   // Initialize particle system
   const particleSystem = new ParticleSystem();
@@ -1646,6 +1310,8 @@ document.addEventListener("DOMContentLoaded", function () {
   // Initialize language (default)
   setLanguage(currentLang);
   updateNavProgress();
+  // Render static project tiles
+  updateProjectCards();
 });
 
 // Escape key to close modals
