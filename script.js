@@ -44,7 +44,7 @@ function normalizeTechnologyName(value) {
 }
 
 function getCategorySkills(category) {
-  return skillDetails?.[category]?.[currentLang]?.skills || [];
+  return skillDetails?.[category]?.skills || [];
 }
 
 function buildTechnologyMap() {
@@ -185,417 +185,188 @@ function attachTechnologyTagListeners(rootElement = document) {
   });
 }
 
-const translations = {
-  de: {
-    title: "Mein Portfolio",
-    header: "Yucan You",
-    home: "Startseite",
-    about: "Über mich",
-    skills: "Skills",
-    projects: "Projekte",
-    contact: "Kontakt",
-    heroTitle: "Willkommen zu meinem Portfolio",
-    heroSubtitle: "Willkommen auf meiner Portfolio-Website.",
-    ctaPrimary: "Projekte ansehen",
-    ctaSecondary: "Kontakt aufnehmen",
-    aboutText: "Meine Timeline:",
-    aboutHighlight: "Ich bin ein leidenschaftlicher Entwickler mit einer Vorliebe für schönes Design und sauberen Code.",
-    projectsText: "Präsentiere deine Projekte hier.",
-    contactText: "Nimm Kontakt mit mir auf.",
-    footer: "© 2026 Yucan You",
-    project1Title: "Portfolio Website",
-    project1Desc: "Eine moderne, interaktive Portfolio-Website mit Animationen",
-    project2Title: "Projekt 2",
-    project2Desc: "Beschreibung deines Projekts hier...",
-    project3Title: "Projekt 3",
-    project3Desc: "Beschreibung deines Projekts hier...",
-    project4Title: "Projekt 4",
-    project4Desc: "Beschreibung deines Projekts hier...",
-    learnMore: "Mehr erfahren",
-    emailLabel: "Email",
-    phoneLabel: "Telefon",
-    addressLabel: "Adresse",
-    socialLabel: "Social Media",
-    technologies: "Technologien",
-    duration: "Dauer",
-    backButton: "← Zurück",
-    langBtn: "🇬🇧 EN",
-    skillsFrontend: "Frontend",
-    skillsBackend: "Backend",
-    skillsTools: "Tools",
-    statProjects: "Projekte",
-    statTechnologies: "Technologien",
-    statCommits: "Commits",
-  },
-  en: {
-    title: "My Portfolio",
-    header: "Yucan You",
-    home: "Home",
-    about: "About",
-    skills: "Skills",
-    projects: "Projects",
-    contact: "Contact",
-    heroTitle: "Welcome to My Portfolio",
-    heroSubtitle: "Welcome to my portfolio website.",
-    ctaPrimary: "View Projects",
-    ctaSecondary: "Get in Touch",
-    aboutText: "My timeline:",
-    aboutHighlight: "I am a passionate developer with a love for beautiful design and clean code.",
-    projectsText: "Showcase your projects here.",
-    contactText: "Get in touch with me.",
-    footer: "© 2026 Yucan You",
-    project1Title: "Portfolio Website",
-    project1Desc: "A modern, interactive portfolio website with animations",
-    project2Title: "Project 2",
-    project2Desc: "Description of your project here...",
-    project3Title: "Project 3",
-    project3Desc: "Description of your project here...",
-    project4Title: "Project 4",
-    project4Desc: "Description of your project here...",
-    learnMore: "Learn More",
-    emailLabel: "Email",
-    phoneLabel: "Phone",
-    addressLabel: "Address",
-    socialLabel: "Social Media",
-    technologies: "Technologies",
-    duration: "Duration",
-    backButton: "← Back",
-    langBtn: "🇩🇪 DE",
-    skillsFrontend: "Frontend",
-    skillsBackend: "Backend",
-    skillsTools: "Tools",
-    statProjects: "Projects",
-    statTechnologies: "Technologies",
-    statCommits: "Commits",
-  },
+const UI_LABELS = {
+  technologies: "Technologien",
+  duration: "Dauer",
+  backButton: "← Zurück",
 };
 
 const projectDetails = {
   1: {
-    de: {
-      title: "Portfolio Website - Test Projekt",
-      shortDesc: "Eine moderne, interaktive Portfolio-Website mit Animationen",
-      fullDesc:
-        "Dies ist ein Test-Projekt, das zeigt, wie ein vollständiges Projekt dargestellt werden kann. Diese Website wurde mit modernen Webtechnologien entwickelt und verfügt über Particle-Animationen, Dark Mode, mehrsprachige Unterstützung und glassmorphische Design-Elemente. Das Projekt demonstriert fortgeschrittene CSS-Techniken, JavaScript-Animationen und responsive Design-Prinzipien.",
-      technologies: ["HTML5", "CSS3", "JavaScript", "Canvas API"],
-      duration: "2 Wochen",
-      videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-      features: ["🎨 Glassmorphism Design", "✨ Particle Animationen", "🌓 Dark/Light Mode", "🌍 DE/EN Sprachen", "📱 Responsive Design"],
-      githubUrl: "#",
-      liveUrl: "#"
-    },
-    en: {
-      title: "Portfolio Website - Test Project",
-      shortDesc: "A modern, interactive portfolio website with animations",
-      fullDesc:
-        "This is a test project demonstrating how a complete project can be presented. This website was built with modern web technologies and features particle animations, dark mode, multilingual support, and glassmorphic design elements. The project demonstrates advanced CSS techniques, JavaScript animations, and responsive design principles.",
-      technologies: ["HTML5", "CSS3", "JavaScript", "Canvas API"],
-      duration: "2 weeks",
-      videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-      features: ["🎨 Glassmorphism Design", "✨ Particle Animations", "🌓 Dark/Light Mode", "🌍 DE/EN Languages", "📱 Responsive Design"],
-      githubUrl: "#",
-      liveUrl: "#"
-    },
+    title: "Lego EV3 Roboter",
+    shortDesc: "Ein Lego EV3 Roboter, den ich programmiert habe, um verschiedene Aufgaben zu erfüllen.",
+    fullDesc:
+      "In diesem Projekt habe ich einen Lego EV3 Roboter programmiert, um verschiedene Aufgaben zu erfüllen. Der Roboter kann Linien folgen, Hindernissen ausweichen und einfache Bewegungsabläufe ausführen. Durch die Verwendung von Python und der EV3-Programmierumgebung konnte ich die Funktionen des Roboters erweitern und anpassen. Das Projekt ist ein fortlaufendes Experimentieren mit der Robotik, um die Möglichkeiten des EV3-Kits voll auszuschöpfen. Momentan beschäftige ich mich mit Hinderniss Räumung per Kranarm.",
+    technologies: ["Python", "EV3"],
+    duration: "Work in Progress",
+    videoUrl: "https://youtu.be/OKg1xoUKLe8",
+    image: "🤖",
+    githubUrl: "https://github.com/mikepro100223/automated_car",
   },
   2: {
-    de: {
-      title: "Projekt 2",
-      shortDesc: "Beschreibung deines Projekts hier...",
-      fullDesc:
-        "Dies ist die ausführliche Beschreibung deines zweiten Projekts. Teile deine Erfolge und was du gelernt hast.",
-      technologies: ["React", "Node.js", "MongoDB"],
-      duration: "4 Monate",
-      image: "⚙️",
-    },
-    en: {
-      title: "Project 2",
-      shortDesc: "Description of your project here...",
-      fullDesc:
-        "This is the detailed description of your second project. Share your achievements and what you learned.",
-      technologies: ["React", "Node.js", "MongoDB"],
-      duration: "4 months",
-      image: "⚙️",
-    },
+    title: "KI-Lagerhaltungs-System",
+    shortDesc: "Ein KI-gestütztes Lagerhaltungs-System durch Image erkennung.",
+    fullDesc:
+      "Am Hackathon Baden Hackt 2026, habe ich in einem Team von 2 Personen ein KI-gestütztes Lagerhaltungs-System entwickelt, das mithilfe von Bilderkennung die Lagerbestände automatisch verwalten kann und auf Bedarf auch Email senden zum Nachfüllen. Durch den Einsatz von Python und YOLO V8 konnten wir eine effiziente Lösung schaffen, die es ermöglicht, den Lagerbestand in Echtzeit zu überwachen und Engpässe frühzeitig zu erkennen. Das Projekt wurde innerhalb von 2 Tagen erfolgreich umgesetzt und demonstriert die Möglichkeiten der KI in der Logistikbranche.",
+    technologies: ["Python", "YOLO V8"],
+    duration: "2 Tage Hackathon",
+    videoUrl: "https://www.youtube.com/watch?v=3_DIj80E2vQ",
+    image: "⚙️",
+    githubUrl: "https://github.com/mikepro100223/KI-Lagerhaltungs-System",
   },
   3: {
-    de: {
-      title: "Projekt 3",
-      shortDesc: "Beschreibung deines Projekts hier...",
-      fullDesc:
-        "Dies ist die ausführliche Beschreibung deines dritten Projekts. Beschreibe die Ziele und das Endergebnis.",
-      technologies: ["Python", "Flask", "SQL"],
-      duration: "2 Monate",
-      image: "🐍",
-    },
-    en: {
-      title: "Project 3",
-      shortDesc: "Description of your project here...",
-      fullDesc:
-        "This is the detailed description of your third project. Describe the goals and final result.",
-      technologies: ["Python", "Flask", "SQL"],
-      duration: "2 months",
-      image: "🐍",
-    },
+    title: "Snake Game",
+    shortDesc: "Ein klassisches Snake-Spiel als eine Web-App entwickelt im Stil von einem Game-Boy",
+    fullDesc:
+      "In diesem Projekt habe ich ein klassisches Snake-Spiel als Web-App entwickelt. Während dem Programmieren kam ich auf die Idee, das Design an den Stil eines Game-Boys anzulehnen, um dem Spiel einen nostalgischen Touch zu verleihen. Das Ergebnis ist eine unterhaltsame und visuell ansprechende Version des beliebten Spiels, die sowohl auf Desktop- als auch auf mobilen Geräten funktioniert.",
+    technologies: ["HTML", "CSS", "JavaScript"],
+    duration: "1 Tag",
+    image: "🐍",
+    imageUrl: "images/Snake.png", 
+    githubUrl: "https://github.com/mikepro100223/snake",
+    liveUrl: "https://yucansnake.netlify.app/",
   },
   4: {
-    de: {
-      title: "Projekt 4",
-      shortDesc: "Beschreibung deines Projekts hier...",
-      fullDesc:
-        "Dies ist die ausführliche Beschreibung deines vierten Projekts. Erkläre die innovativen Aspekte.",
-      technologies: ["Vue.js", "Firebase", "Figma"],
-      duration: "5 Monate",
-      image: "✨",
-    },
-    en: {
-      title: "Project 4",
-      shortDesc: "Description of your project here...",
-      fullDesc:
-        "This is the detailed description of your fourth project. Explain the innovative aspects.",
-      technologies: ["Vue.js", "Firebase", "Figma"],
-      duration: "5 months",
-      image: "✨",
-    },
+    title: "MineSweeper",
+    shortDesc: "Ein klassisches Minesweeper-Spiel als eine Web-App entwickelt.",
+    fullDesc:
+      "In diesem Projekt habe ich ein klassisches Minesweeper-Spiel als Web-App entwickelt. Das Design ist einfach und benutzerfreundlich, mit klaren Grafiken und intuitiven Bedienelementen. Wie auch meine anderen Spiele, ist es möglich dieses am Handy auszuprobieren. Das Spiel bietet eine unterhaltsame Möglichkeit, Logik und Strategie zu üben, während es gleichzeitig an das nostalgische Gefühl des Originalspiels erinnert.",
+    technologies: ["HTML", "CSS", "JavaScript"],
+    duration: "1 Tag",
+    image: "💣",
+    imageUrl: "images/MineSweeper.png",
+    githubUrl: "https://github.com/mikepro100223/Minesweeper",
+    liveUrl: "https://yucanminesweeper.netlify.app/",
   },
 };
 
-let currentLang = "de";
 let isDarkMode = true; // Always dark mode
 let currentProject = null;
 let currentSkill = null;
 
 const skillDetails = {
   frontend: {
-    de: {
-      title: "Frontend Entwicklung",
-      icon: "🎨",
-      description: "Frontend-Entwicklung umfasst die Erstellung der visuellen und interaktiven Teile einer Website, die Benutzer direkt sehen und mit denen sie interagieren. Es geht um Design, Benutzererfahrung und die technische Umsetzung im Browser.",
-      skills: [
-        {
-          name: "HTML",
-          level: "Fortgeschritten",
-          description: "HTML (HyperText Markup Language) ist die Grundstruktur jeder Webseite. Es definiert den Inhalt und die Hierarchie von Elementen wie Überschriften, Absätzen, Bildern und Links.",
-          experience: "2+ Jahre"
-        },
-        {
-          name: "CSS",
-          level: "Fortgeschritten",
-          description: "CSS (Cascading Style Sheets) ist für das visuelle Styling verantwortlich. Damit gestalte ich Layouts, Farben, Animationen und responsive Designs, die auf allen Geräten funktionieren.",
-          experience: "2+ Jahre"
-        },
-        {
-          name: "JavaScript",
-          level: "Fortgeschritten",
-          description: "JavaScript macht Websites interaktiv. Von einfachen Klick-Events bis zu komplexen Animationen und API-Abfragen - JavaScript bringt Leben in die Webseite.",
-          experience: "2+ Jahre"
-        },
-        {
-          name: "React",
-          level: "Mittel",
-          description: "React ist eine moderne JavaScript-Bibliothek für den Bau von interaktiven Benutzeroberflächen. Mit wiederverwendbaren Komponenten lassen sich komplexe Anwendungen effizient entwickeln.",
-          experience: "1+ Jahre"
-        }
-      ]
-    },
-    en: {
-      title: "Frontend Development",
-      icon: "🎨",
-      description: "Frontend development encompasses creating the visual and interactive parts of a website that users directly see and interact with. It's about design, user experience, and technical implementation in the browser.",
-      skills: [
-        {
-          name: "HTML",
-          level: "Advanced",
-          description: "HTML (HyperText Markup Language) is the basic structure of every webpage. It defines the content and hierarchy of elements like headings, paragraphs, images, and links.",
-          experience: "3+ years"
-        },
-        {
-          name: "CSS",
-          level: "Advanced",
-          description: "CSS (Cascading Style Sheets) is responsible for visual styling. I use it to create layouts, colors, animations, and responsive designs that work on all devices.",
-          experience: "3+ years"
-        },
-        {
-          name: "JavaScript",
-          level: "Advanced",
-          description: "JavaScript makes websites interactive. From simple click events to complex animations and API calls - JavaScript brings websites to life.",
-          experience: "2+ years"
-        },
-        {
-          name: "React",
-          level: "Intermediate",
-          description: "React is a modern JavaScript library for building interactive user interfaces. With reusable components, complex applications can be developed efficiently.",
-          experience: "1+ year"
-        }
-      ]
-    }
+    title: "Frontend Entwicklung",
+    icon: "🎨",
+    description: "Frontend-Entwicklung umfasst die Erstellung der visuellen und interaktiven Teile einer Website, die Benutzer direkt sehen und mit denen sie interagieren. Es geht um Design, Benutzererfahrung und die technische Umsetzung im Browser.",
+    skills: [
+      {
+        name: "HTML",
+        level: "Fortgeschritten",
+        description: "HTML (HyperText Markup Language) ist die Grundstruktur jeder Webseite. Es definiert den Inhalt und die Hierarchie von Elementen wie Überschriften, Absätzen, Bildern und Links.",
+        experience: "2+ Jahre"
+      },
+      {
+        name: "CSS",
+        level: "Fortgeschritten",
+        description: "CSS (Cascading Style Sheets) ist für das visuelle Styling verantwortlich. Damit gestalte ich Layouts, Farben, Animationen und responsive Designs, die auf allen Geräten funktionieren.",
+        experience: "2+ Jahre"
+      },
+      {
+        name: "JavaScript",
+        level: "Fortgeschritten",
+        description: "JavaScript macht Websites interaktiv. Von einfachen Klick-Events bis zu komplexen Animationen und API-Abfragen - JavaScript bringt Leben in die Webseite.",
+        experience: "2+ Jahre"
+      },
+      {
+        name: "React",
+        level: "Mittel",
+        description: "React ist eine moderne JavaScript-Bibliothek für den Bau von interaktiven Benutzeroberflächen. Mit wiederverwendbaren Komponenten lassen sich komplexe Anwendungen effizient entwickeln.",
+        experience: "1+ Jahre"
+      }
+    ]
   },
   backend: {
-    de: {
-      title: "Backend Entwicklung",
-      icon: "⚙️",
-      description: "Backend-Entwicklung bezieht sich auf die serverseitige Logik, Datenbanken und APIs, die im Hintergrund laufen. Hier werden Daten verarbeitet, gespeichert und für das Frontend bereitgestellt.",
-      skills: [
-        {
-          name: "Node.js",
-          level: "Fortgeschritten",
-          description: "Node.js ermöglicht die Ausführung von JavaScript auf dem Server. Damit kann ich serverseitige Anwendungen, REST APIs und Real-time Services entwickeln.",
-          experience: "1+ Jahre"
-        },
-        {
-          name: "Python",
-          level: "Mittel",
-          description: "Python ist eine vielseitige Programmiersprache, die ich für Backend-Entwicklung, Datenanalyse und Automatisierung einsetze. Sie ist bekannt für ihre Lesbarkeit und Effizienz.",
-          experience: "1+ Jahre"
-        },
-        {
-          name: "SQL",
-          level: "Mittel",
-          description: "SQL (Structured Query Language) ist die Sprache für relationale Datenbanken. Damit kann ich Daten effizient abfragen, speichern und verwalten.",
-          experience: "2+ Jahre"
-        },
-        {
-          name: "MongoDB",
-          level: "Grundlagen",
-          description: "MongoDB ist eine NoSQL-Datenbank, die Daten in flexiblen JSON-ähnlichen Dokumenten speichert. Ideal für moderne, skalierbare Anwendungen.",
-          experience: "<1 Jahr"
-        }
-        ,
-        {
-          name: "C#",
-          level: "Mittel",
-          description: "C# ist eine leistungsfähige, statisch typisierte Sprache für Anwendungen unter .NET — ideal für Backend, APIs und Desktop-Anwendungen.",
-          experience: "2+ Jahre"
-        },
-        {
-          name: ".NET",
-          level: "Mittel",
-          description: ".NET ist die Laufzeitplattform für C#-Anwendungen; verwendet für serverseitige Dienste, APIs und Cross-Platform-Apps.",
-          experience: "1+ Jahre"
-        }
-      ]
-    },
-    en: {
-      title: "Backend Development",
-      icon: "⚙️",
-      description: "Backend development refers to server-side logic, databases, and APIs that run in the background. This is where data is processed, stored, and provided to the frontend.",
-      skills: [
-        {
-          name: "Node.js",
-          level: "Advanced",
-          description: "Node.js enables running JavaScript on the server. I use it to develop server-side applications, REST APIs, and real-time services.",
-          experience: "2+ years"
-        },
-        {
-          name: "Python",
-          level: "Intermediate",
-          description: "Python is a versatile programming language that I use for backend development, data analysis, and automation. It's known for its readability and efficiency.",
-          experience: "2+ years"
-        },
-        {
-          name: "SQL",
-          level: "Intermediate",
-          description: "SQL (Structured Query Language) is the language for relational databases. I use it to efficiently query, store, and manage data.",
-          experience: "1+ year"
-        },
-        {
-          name: "MongoDB",
-          level: "Beginner",
-          description: "MongoDB is a NoSQL database that stores data in flexible JSON-like documents. Ideal for modern, scalable applications.",
-          experience: "1 year"
-        }
-        ,
-        {
-          name: "C#",
-          level: "Intermediate",
-          description: "C# is a powerful, statically typed language used with .NET for backend, APIs and desktop applications.",
-          experience: "1+ year"
-        },
-        {
-          name: ".NET",
-          level: "Intermediate",
-          description: ".NET is the runtime/platform for C# applications; used for server-side services, APIs and cross-platform apps.",
-          experience: "1+ year"
-        }
-      ]
-    }
+    title: "Backend Entwicklung",
+    icon: "⚙️",
+    description: "Backend-Entwicklung bezieht sich auf die serverseitige Logik, Datenbanken und APIs, die im Hintergrund laufen. Hier werden Daten verarbeitet, gespeichert und für das Frontend bereitgestellt.",
+    skills: [
+      {
+        name: "Node.js",
+        level: "Fortgeschritten",
+        description: "Node.js ermöglicht die Ausführung von JavaScript auf dem Server. Damit kann ich serverseitige Anwendungen, REST APIs und Real-time Services entwickeln.",
+        experience: "1+ Jahre"
+      },
+      {
+        name: "Python",
+        level: "Fortgeschritten",
+        description: "Python ist eine vielseitige Programmiersprache, die ich für Backend-Entwicklung, Datenanalyse und Automatisierung einsetze. Sie ist bekannt für ihre Lesbarkeit und Effizienz.",
+        experience: "1+ Jahre"
+      },
+      {
+        name: "SQL",
+        level: "Fortgeschritten",
+        description: "SQL (Structured Query Language) ist die Sprache für relationale Datenbanken. Damit kann ich Daten effizient abfragen, speichern und verwalten.",
+        experience: "2+ Jahre"
+      },
+      {
+        name: "MongoDB",
+        level: "Grundlagen",
+        description: "MongoDB ist eine NoSQL-Datenbank, die Daten in flexiblen JSON-ähnlichen Dokumenten speichert. Ideal für moderne, skalierbare Anwendungen.",
+        experience: "<1 Jahr"
+      },
+      {
+        name: "C#",
+        level: "Fortgeschritten",
+        description: "C# ist eine leistungsfähige, statisch typisierte Sprache für Anwendungen unter .NET - ideal für Backend, APIs und Desktop-Anwendungen.",
+        experience: "2+ Jahre"
+      },
+      {
+        name: ".NET",
+        level: "Fortgeschritten",
+        description: ".NET ist die Laufzeitplattform für C#-Anwendungen; verwendet für serverseitige Dienste, APIs und Cross-Platform-Apps.",
+        experience: "1+ Jahre"
+      }
+    ]
   },
   tools: {
-    de: {
-      title: "Tools & Workflow",
-      icon: "🛠️",
-      description: "Professionelle Entwicklung erfordert den Einsatz der richtigen Tools. Von Versionskontrolle über Code-Editoren bis zu Design-Tools - diese Werkzeuge steigern die Produktivität und Qualität.",
-      skills: [
-        {
-          name: "Git",
-          level: "Fortgeschritten",
-          description: "Git ist ein Versionskontrollsystem, das die Zusammenarbeit im Team ermöglicht und den Code-Verlauf nachvollziehbar macht. Unverzichtbar für moderne Softwareentwicklung.",
-          experience: "3+ Jahre"
-        },
-        {
-          name: "VS Code",
-          level: "Fortgeschritten",
-          description: "Visual Studio Code ist mein Haupt-Code-Editor. Mit Extensions, Shortcuts und integrierten Tools beschleunigt es die Entwicklung erheblich.",
-          experience: "3+ Jahre"
-        },
-        {
-          name: "Figma",
-          level: "Mittel",
-          description: "Figma ist ein kollaboratives Design-Tool für UI/UX-Design. Damit erstelle ich Prototypen und arbeite eng mit Designern zusammen.",
-          experience: "1+ Jahre"
-        },
-        {
-          name: "Docker",
-          level: "Grundlagen",
-          description: "Docker ermöglicht die Containerisierung von Anwendungen. Das sorgt für konsistente Entwicklungs- und Produktionsumgebungen.",
-          experience: "1+ Jahr"
-        }
-        ,
-        {
-          name: "Powershell",
-          level: "Mittel",
-          description: "Powershell nutze ich für Automatisierung, DevOps-Skripte und Systemadministration unter Windows und cross-platform mit PowerShell Core.",
-          experience: "2+ Jahre"
-        }
-      ]
-    },
-    en: {
-      title: "Tools & Workflow",
-      icon: "🛠️",
-      description: "Professional development requires using the right tools. From version control to code editors and design tools - these tools increase productivity and quality.",
-      skills: [
-        {
-          name: "Git",
-          level: "Advanced",
-          description: "Git is a version control system that enables team collaboration and makes code history traceable. Essential for modern software development.",
-          experience: "3+ years"
-        },
-        {
-          name: "VS Code",
-          level: "Advanced",
-          description: "Visual Studio Code is my main code editor. With extensions, shortcuts, and integrated tools, it significantly accelerates development.",
-          experience: "3+ years"
-        },
-        {
-          name: "Figma",
-          level: "Intermediate",
-          description: "Figma is a collaborative design tool for UI/UX design. I use it to create prototypes and work closely with designers.",
-          experience: "1+ year"
-        },
-        {
-          name: "Docker",
-          level: "Beginner",
-          description: "Docker enables containerization of applications. This ensures consistent development and production environments.",
-          experience: "1 year"
-        }
-        ,
-        {
-          name: "Powershell",
-          level: "Intermediate",
-          description: "I use PowerShell for automation, DevOps scripts and system administration on Windows and cross-platform with PowerShell Core.",
-          experience: "1+ year"
-        }
-      ]
-    }
+    title: "Tools & Workflow",
+    icon: "🛠️",
+    description: "Professionelle Entwicklung erfordert den Einsatz der richtigen Tools. Von Versionskontrolle über Code-Editoren bis zu Design-Tools - diese Werkzeuge steigern die Produktivität und Qualität.",
+    skills: [
+      {
+        name: "EV3",
+        level: "Fortgeschritten",
+        description: "Lego EV3 ist ein Robotics-Kit, mit dem ich verschiedene Projekte umgesetzt habe, darunter autonome Fahrzeuge und Robotik-Wettbewerbe.",
+        experience: "5+ Jahr"
+      },
+      {
+        name: "Git",
+        level: "Fortgeschritten",
+        description: "Git ist ein Versionskontrollsystem, das die Zusammenarbeit im Team ermöglicht und den Code-Verlauf nachvollziehbar macht. Unverzichtbar für moderne Softwareentwicklung.",
+        experience: "3+ Jahre"
+      },
+      {
+        name: "VS Code",
+        level: "Fortgeschritten",
+        description: "Visual Studio Code ist mein Haupt-Code-Editor. Mit Extensions, Shortcuts und integrierten Tools beschleunigt es die Entwicklung erheblich.",
+        experience: "3+ Jahre"
+      },
+      {
+        name: "Figma",
+        level: "Mittel",
+        description: "Figma ist ein kollaboratives Design-Tool für UI/UX-Design. Damit erstelle ich Prototypen und arbeite eng mit Designern zusammen.",
+        experience: "1+ Jahre"
+      },
+      {
+        name: "Docker",
+        level: "Mittel",
+        description: "Docker ermöglicht die Containerisierung von Anwendungen. Das sorgt für konsistente Entwicklungs- und Produktionsumgebungen.",
+        experience: "1+ Jahr"
+      },
+      {
+        name: "Powershell",
+        level: "Mittel",
+        description: "Powershell nutze ich für Automatisierung, DevOps-Skripte und Systemadministration unter Windows und cross-platform mit PowerShell Core.",
+        experience: "2+ Jahre"
+      },
+      {
+        name: "YOLO V8",
+        level: "Mittel",
+        description: "YOLO V8 ist ein leistungsstarkes Objekterkennungssystem, das ich für das KI-Lagerhaltungs-System eingesetzt habe.",
+        experience: "1 Jahr"
+      }
+    ]
   }
 };
 
@@ -899,124 +670,9 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-function setLanguage(lang) {
-  currentLang = lang;
-  document.documentElement.lang = lang;
-  document.title = translations[lang].title;
-  
-  // Header
-  const headerH1 = document.querySelector(".gradient-text");
-  if (headerH1) headerH1.textContent = translations[lang].header;
-  
-  // Update language button
-  
-  // Navigation
-  const navLinks = document.querySelectorAll("nav a");
-  if (navLinks[0]) navLinks[0].textContent = translations[lang].home;
-  if (navLinks[1]) navLinks[1].textContent = translations[lang].about;
-  if (navLinks[2]) navLinks[2].textContent = translations[lang].skills;
-  if (navLinks[3]) navLinks[3].textContent = translations[lang].projects;
-  if (navLinks[4]) navLinks[4].textContent = translations[lang].contact;
-  
-  // Hero Section
-  const heroTitle = document.querySelector(".hero-title");
-  if (heroTitle) heroTitle.textContent = translations[lang].heroTitle;
-  
-  const heroSubtitle = document.querySelector(".hero-subtitle");
-  if (heroSubtitle) heroSubtitle.textContent = translations[lang].heroSubtitle;
-  
-  const ctaButtons = document.querySelectorAll(".cta-button");
-  if (ctaButtons[0]) ctaButtons[0].textContent = translations[lang].ctaPrimary;
-  if (ctaButtons[1]) ctaButtons[1].textContent = translations[lang].ctaSecondary;
-  
-  // About Section
-  const aboutText = document.querySelector("#about .about-text p:first-child");
-  if (aboutText) aboutText.textContent = translations[lang].aboutText;
-  
-  const highlightText = document.querySelector(".highlight-text");
-  if (highlightText) highlightText.textContent = translations[lang].aboutHighlight;
-  
-  const statLabels = document.querySelectorAll(".stat-label");
-  if (statLabels[0]) statLabels[0].textContent = translations[lang].statProjects;
-  if (statLabels[1]) statLabels[1].textContent = translations[lang].statTechnologies;
-  if (statLabels[2]) statLabels[2].textContent = translations[lang].statCommits;
-  
-  // Skills Section
-  const skillCards = document.querySelectorAll(".skill-card h3");
-  if (skillCards[0]) skillCards[0].textContent = translations[lang].skillsFrontend;
-  if (skillCards[1]) skillCards[1].textContent = translations[lang].skillsBackend;
-  if (skillCards[2]) skillCards[2].textContent = translations[lang].skillsTools;
-  
-  // Section Headers
-  const sectionHeaders = document.querySelectorAll(".section-header h2");
-  if (sectionHeaders[0]) sectionHeaders[0].textContent = translations[lang].about;
-  if (sectionHeaders[1]) sectionHeaders[1].textContent = translations[lang].skills;
-  if (sectionHeaders[2]) sectionHeaders[2].textContent = translations[lang].projects;
-  if (sectionHeaders[3]) sectionHeaders[3].textContent = translations[lang].contact;
-  
-  // Contact Section
-  const contactIntro = document.querySelector(".contact-intro");
-  if (contactIntro) contactIntro.textContent = translations[lang].contactText;
-  
-  const contactHeaders = document.querySelectorAll(".contact-item h3");
-  if (contactHeaders[0]) contactHeaders[0].textContent = translations[lang].emailLabel;
-  if (contactHeaders[1]) contactHeaders[1].textContent = translations[lang].phoneLabel;
-  if (contactHeaders[2]) contactHeaders[2].textContent = translations[lang].addressLabel;
-  
-  // Footer
-  const footer = document.querySelector("footer p");
-  if (footer) footer.textContent = translations[lang].footer;
-  
-  // Projects
-  const projectCards = document.querySelectorAll(".project-card");
-  
-  if (projectCards[0]) {
-    const card0Title = projectCards[0].querySelector("h3");
-    const card0Desc = projectCards[0].querySelector("p");
-    const card0Link = projectCards[0].querySelector(".project-link");
-    if (card0Title) card0Title.textContent = translations[lang].project1Title;
-    if (card0Desc) card0Desc.textContent = translations[lang].project1Desc;
-    if (card0Link) card0Link.innerHTML = `${translations[lang].learnMore} <span class="arrow">→</span>`;
-  }
-  
-  if (projectCards[1]) {
-    const card1Title = projectCards[1].querySelector("h3");
-    const card1Desc = projectCards[1].querySelector("p");
-    const card1Link = projectCards[1].querySelector(".project-link");
-    if (card1Title) card1Title.textContent = translations[lang].project2Title;
-    if (card1Desc) card1Desc.textContent = translations[lang].project2Desc;
-    if (card1Link) card1Link.innerHTML = `${translations[lang].learnMore} <span class="arrow">→</span>`;
-  }
-  
-  if (projectCards[2]) {
-    const card2Title = projectCards[2].querySelector("h3");
-    const card2Desc = projectCards[2].querySelector("p");
-    const card2Link = projectCards[2].querySelector(".project-link");
-    if (card2Title) card2Title.textContent = translations[lang].project3Title;
-    if (card2Desc) card2Desc.textContent = translations[lang].project3Desc;
-    if (card2Link) card2Link.innerHTML = `${translations[lang].learnMore} <span class="arrow">→</span>`;
-  }
-  
-  if (projectCards[3]) {
-    const card3Title = projectCards[3].querySelector("h3");
-    const card3Desc = projectCards[3].querySelector("p");
-    const card3Link = projectCards[3].querySelector(".project-link");
-    if (card3Title) card3Title.textContent = translations[lang].project4Title;
-    if (card3Desc) card3Desc.textContent = translations[lang].project4Desc;
-    if (card3Link) card3Link.innerHTML = `${translations[lang].learnMore} <span class="arrow">→</span>`;
-  }
-  
-  if (currentProject) {
-    showProjectDetail(currentProject);
-  }
-
-  // Recalculate nav marker after label widths change.
-  requestAnimationFrame(updateNavProgress);
-}
-
 function showProjectDetail(projectId) {
   currentProject = projectId;
-  const project = projectDetails[projectId][currentLang];
+  const project = projectDetails[projectId];
   const modal = document.getElementById("projectModal");
   const detailContainer = document.getElementById("projectDetail");
 
@@ -1030,12 +686,16 @@ function showProjectDetail(projectId) {
         allowfullscreen>
       </iframe>
     </div>
-  ` : (project.image ? `<div class="project-image">${project.image}</div>` : '');
+  ` : (project.imageUrl ? `
+  <div class="project-image">
+    <img src="${project.imageUrl}" alt="${project.title}">
+  </div>
+` : '');
 
   // Build features section if features exist
   const featuresSection = project.features ? `
     <div class="meta-item">
-      <h4>${currentLang === 'de' ? 'Features' : 'Features'}</h4>
+      <h4>Features</h4>
       <ul class="feature-list">
         ${project.features.map(feature => `<li>${feature}</li>`).join('')}
       </ul>
@@ -1049,7 +709,7 @@ function showProjectDetail(projectId) {
         <i class="fab fa-github"></i> GitHub
       </a>` : ''}
       ${project.liveUrl ? `<a href="${project.liveUrl}" target="_blank" class="action-btn live-btn">
-        <i class="fas fa-external-link-alt"></i> ${currentLang === 'de' ? 'Live Demo' : 'Live Demo'}
+        <i class="fas fa-external-link-alt"></i> Live Demo
       </a>` : ''}
     </div>
   ` : '';
@@ -1059,7 +719,7 @@ function showProjectDetail(projectId) {
   detailContainer.innerHTML = `
     <div class="project-detail-header">
       <button class="back-button" onclick="closeProjectDetail()">${
-        translations[currentLang].backButton
+        UI_LABELS.backButton
       }</button>
       <h2>${project.title}</h2>
     </div>
@@ -1070,14 +730,14 @@ function showProjectDetail(projectId) {
       <div class="project-meta">
         ${technologyTags ? `
         <div class="meta-item">
-          <h4>${translations[currentLang].technologies}</h4>
+          <h4>${UI_LABELS.technologies}</h4>
           <div class="tech-tags">
             ${technologyTags}
           </div>
         </div>
         ` : ''}
         <div class="meta-item">
-          <h4>${translations[currentLang].duration}</h4>
+          <h4>${UI_LABELS.duration}</h4>
           <p>${project.duration}</p>
         </div>
         ${featuresSection}
@@ -1100,7 +760,7 @@ function closeProjectDetail() {
 
 function showSkillDetail(skillKey) {
   currentSkill = skillKey;
-  const skill = skillDetails[skillKey][currentLang];
+  const skill = skillDetails[skillKey];
   const modal = document.getElementById("skillModal");
   const detailContainer = document.getElementById("skillDetail");
 
@@ -1120,7 +780,7 @@ function showSkillDetail(skillKey) {
   detailContainer.innerHTML = `
     <div class="project-detail-header">
       <button class="back-button" onclick="closeSkillDetail()">${
-        translations[currentLang].backButton
+        UI_LABELS.backButton
       }</button>
       <div class="skill-detail-title">
         <span class="skill-icon-large">${skill.icon}</span>
@@ -1154,7 +814,7 @@ function updateProjectCards() {
   const ids = Object.keys(projectDetails).sort((a,b) => Number(a) - Number(b));
 
   projectsGrid.innerHTML = ids.map(id => {
-    const proj = projectDetails[id][currentLang] || projectDetails[id].de || {};
+    const proj = projectDetails[id] || {};
     const icon = proj.image || '📁';
     return `
       <div class="project-card" data-project-id="${id}" style="cursor: pointer;">
@@ -1190,9 +850,8 @@ function attachProjectCardListeners() {
 
 function showDynamicProject(project) {
   if (!project) return;
-  
-  const lang = currentLang;
-  const projectData = project[lang] || project.de || {};
+
+  const projectData = project;
   const modal = document.getElementById("projectModal");
   const detailContainer = document.getElementById("projectDetail");
   
@@ -1226,7 +885,7 @@ function showDynamicProject(project) {
   
   detailContainer.innerHTML = `
     <div class="project-detail-header">
-      <button class="back-button" onclick="closeProjectDetail()">${translations[lang].backButton}</button>
+      <button class="back-button" onclick="closeProjectDetail()">${UI_LABELS.backButton}</button>
       <h2>${projectData.title}</h2>
     </div>
     <div class="project-detail-content">
@@ -1236,7 +895,7 @@ function showDynamicProject(project) {
       <div class="project-meta">
         ${technologyTags ? `
           <div class="meta-item">
-            <h4>${translations[lang].technologies}</h4>
+            <h4>${UI_LABELS.technologies}</h4>
             <div class="tech-tags">
               ${technologyTags}
             </div>
@@ -1244,7 +903,7 @@ function showDynamicProject(project) {
         ` : ''}
         ${projectData.duration ? `
           <div class="meta-item">
-            <h4>${translations[lang].duration}</h4>
+            <h4>${UI_LABELS.duration}</h4>
             <p>${projectData.duration}</p>
           </div>
         ` : ''}
@@ -1347,8 +1006,6 @@ document.addEventListener("DOMContentLoaded", function () {
     document.body.classList.add("dark-mode");
   }
   
-  // Initialize language (default)
-  setLanguage(currentLang);
   updateNavProgress();
   // Render static project tiles
   updateProjectCards();
