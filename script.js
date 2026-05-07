@@ -790,6 +790,11 @@ function updateNavProgress() {
 
 /* Glass droplet indicator that follows the active nav item */
 let hoveredGlassTarget = null;
+let lastScrollIndex = -1;
+let bounceScrollTimeout = null;
+let lastGlobalScrollY = window.scrollY;
+let lastGlobalScrollTime = Date.now();
+let currentScrollVelocity = 0;
 
 function updateGlassIndicator() {
   const header = document.querySelector('header');
@@ -832,41 +837,163 @@ function updateGlassIndicator() {
   indicator.style.height = `${newHeight}px`;
   indicator.style.left = `${targetCenterX}px`;
   indicator.style.top = `${targetCenterY}px`;
-  indicator.style.borderRadius = `${newHeight / 2}px`;
 
-  // Update active classes for links
+  // Read desired radius from CSS variable (matches name-bubble)
+  const rootStyles = window.getComputedStyle(document.documentElement);
+  const cssRadiusRaw = rootStyles.getPropertyValue('--glass-radius');
+  const cssRadius = cssRadiusRaw ? parseFloat(cssRadiusRaw) : null;
+  const computedRadius = cssRadius ? Math.min(cssRadius, newHeight / 2) : newHeight / 2;
+  indicator.style.borderRadius = `${computedRadius}px`;
+
+  // Update active classes for links (visual active state for keyboard/scroll)
   navLinks.forEach((l, i) => l.classList.toggle('active', i === currentIndex));
+
+  // Ensure only the element currently under the indicator has the overlay highlight class
+  navLinks.forEach((l) => l.classList.remove('overlay-highlight'));
+  if (targetElement && targetElement.classList) {
+    targetElement.classList.add('overlay-highlight');
+  }
 
   // choose a color for the active item (can be tuned per index or per section)
   const colors = ['rgba(255,255,255,0.30)', 'rgba(255,255,255,0.26)', 'rgba(255,255,255,0.24)', 'rgba(255,255,255,0.22)', 'rgba(255,255,255,0.20)'];
   const color = colors[currentIndex % colors.length];
   indicator.style.setProperty('--indicator-color', color);
   header.style.setProperty('--indicator-color', color);
+
+  // Bounce-Effekt wenn ganz nach oben/unten gescrollt wird (nur bei schnellem Scrollen)
+  const isFastScroll = currentScrollVelocity > 2;
+
+  if (currentIndex !== lastScrollIndex && lastScrollIndex !== -1 && !hoveredGlassTarget && isFastScroll) {
+    if (currentIndex === 0) {
+      indicator.classList.add('bounce-left');
+      clearTimeout(bounceScrollTimeout);
+      bounceScrollTimeout = setTimeout(() => indicator.classList.remove('bounce-left'), 800);
+    } else if (currentIndex === navLinks.length - 1) {
+      indicator.classList.add('bounce-right');
+      clearTimeout(bounceScrollTimeout);
+      bounceScrollTimeout = setTimeout(() => indicator.classList.remove('bounce-right'), 800);
+    }
+  }
+  lastScrollIndex = currentIndex;
 }
 
 function bindGlassHoverTargets() {
   const header = document.querySelector('header');
   const navLinks = Array.from(document.querySelectorAll('.glass-nav-container .nav-link'));
-  const hoverTargets = navLinks.filter(Boolean);
 
-  hoverTargets.forEach((target) => {
-    target.addEventListener('pointerenter', () => {
-      hoveredGlassTarget = target;
-      updateGlassIndicator();
-    });
+  // Make overlay follow the pointer anywhere inside the nav container (not only on item centers)
+  const navContainer = document.querySelector('.glass-nav-container');
+  let lastClientX = null;
+  let lastPointerTime = null;
+  let leaveTimeout = null;
 
-    target.addEventListener('pointerleave', () => {
-      if (hoveredGlassTarget === target) {
-        hoveredGlassTarget = null;
+  if (navContainer) {
+    const handleGlassPointer = (ev) => {
+      clearTimeout(leaveTimeout); // Abbrechen, falls wir doch wieder drüber hovern
+      
+      // find closest nav link under pointer
+      // for touch interactions, document.elementFromPoint can be more reliable than ev.target on move
+      let targetEl = ev.target;
+      if (ev.type === 'touchmove') {
+        const touch = ev.touches[0];
+        targetEl = document.elementFromPoint(touch.clientX, touch.clientY);
       }
-      updateGlassIndicator();
-    });
-  });
+      
+      const el = targetEl && targetEl.closest ? targetEl.closest('.nav-link') : null;
+      hoveredGlassTarget = el || null;
 
-  if (header) {
-    header.addEventListener('pointerleave', () => {
-      hoveredGlassTarget = null;
-      updateGlassIndicator();
+      // compute a left position relative to header
+      const headerRect = header ? header.getBoundingClientRect() : { left: 0, top: 0 };
+      
+      let clientX = ev.clientX;
+      if (ev.type === 'touchmove' || ev.type === 'touchstart') {
+        clientX = ev.touches[0].clientX;
+      }
+
+      const now = Date.now();
+      let velocityX = 0;
+      if (lastClientX !== null && lastPointerTime !== null && (now - lastPointerTime) > 0) {
+        velocityX = (clientX - lastClientX) / (now - lastPointerTime);
+      }
+      lastClientX = clientX;
+      lastPointerTime = now;
+
+      let rawPointerX = clientX - headerRect.left;
+
+      const indicator = document.querySelector('.glass-indicator');
+      if (!indicator) return;
+
+      const paddingX = 20;
+      let targetWidth = 120;
+      let targetHeight = 44;
+      let pointerX = rawPointerX;
+
+      // if hovering a link, match its size and snap to its center (magnetic effect)
+      if (hoveredGlassTarget) {
+        const rect = hoveredGlassTarget.getBoundingClientRect();
+        const targetCenterX = (rect.left - headerRect.left) + rect.width / 2;
+        
+        // Magnet-Effekt: snappe zur Mitte, aber gib mehr Spielraum für die Maus (erst nah an der Mitte snappen)
+        const distToCenter = Math.abs(rawPointerX - targetCenterX);
+        const snapThreshold = 15; // 15px radius sweet spot for snapping
+
+        if (distToCenter < snapThreshold) {
+          pointerX = targetCenterX; // Snap
+        } else {
+          // Soft pull towards center if outside the sweet spot
+          pointerX = rawPointerX + (targetCenterX - rawPointerX) * 0.15;
+        }
+
+        targetWidth = Math.max(rect.width + paddingX * 2, 44);
+        targetHeight = Math.max(rect.height + 10, 36);
+      }
+
+      // Boundary clamping
+      const containerRect = navContainer.getBoundingClientRect();
+      const minLeftEdge = containerRect.left - headerRect.left + 8; // 8px Puffer zum Rand
+      const maxRightEdge = containerRect.right - headerRect.left - 8;
+
+      let clampedLeftEdge = pointerX - targetWidth / 2;
+      let clampedRightEdge = pointerX + targetWidth / 2;
+
+      // Hit boundary interactions to trigger the same bounce animation as scroll!
+      if (clampedLeftEdge < minLeftEdge) {
+        pointerX = minLeftEdge + targetWidth / 2;
+        // Trigger bounce left if pulling hard
+        if (!indicator.classList.contains('bounce-left') && velocityX < -0.2) {
+          indicator.classList.add('bounce-left');
+          clearTimeout(bounceScrollTimeout);
+          bounceScrollTimeout = setTimeout(() => indicator.classList.remove('bounce-left'), 800);
+        }
+      } else if (clampedRightEdge > maxRightEdge) {
+        pointerX = maxRightEdge - targetWidth / 2;
+        // Trigger bounce right if pulling hard
+        if (!indicator.classList.contains('bounce-right') && velocityX > 0.2) {
+          indicator.classList.add('bounce-right');
+          clearTimeout(bounceScrollTimeout);
+          bounceScrollTimeout = setTimeout(() => indicator.classList.remove('bounce-right'), 800);
+        }
+      }
+
+      indicator.style.width = `${targetWidth}px`;
+      indicator.style.height = `${targetHeight}px`;
+      indicator.style.left = `${pointerX}px`;
+
+      // update highlight class on items
+      navLinks.forEach((l) => l.classList.toggle('overlay-highlight', l === hoveredGlassTarget));
+    };
+
+    navContainer.addEventListener('pointermove', handleGlassPointer);
+    navContainer.addEventListener('pointerdown', handleGlassPointer);
+    navContainer.addEventListener('touchmove', handleGlassPointer, { passive: true });
+    navContainer.addEventListener('touchstart', handleGlassPointer, { passive: true });
+
+    // Clear on leave of nav container with a small delay
+    navContainer.addEventListener('pointerleave', () => {
+      leaveTimeout = setTimeout(() => {
+        hoveredGlassTarget = null;
+        updateGlassIndicator();
+      }, 500); // 500ms warten, bevor die Bubble zurück zum aktiven Abschnitt flitzt
     });
   }
 }
@@ -882,11 +1009,28 @@ document.addEventListener('click', (e) => {
   if (!section) return;
   const header = document.querySelector('header');
   const headerHeight = header ? header.offsetHeight : 70;
-  const top = section.getBoundingClientRect().top + window.pageYOffset - headerHeight - 8;
+  
+  let top = section.getBoundingClientRect().top + window.pageYOffset - headerHeight - 8;
+  
+  // Verhindere, dass weiter als bis zum Ende der Seite gescrollt wird (verhindert weiße Flächen unten)
+  const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+  if (top > maxScroll) {
+    top = maxScroll;
+  }
+
   window.scrollTo({ top, behavior: 'smooth' });
 });
 
 window.addEventListener('scroll', () => {
+  const now = Date.now();
+  const deltaY = Math.abs(window.scrollY - lastGlobalScrollY);
+  const deltaT = now - lastGlobalScrollTime;
+  if (deltaT > 0) {
+    currentScrollVelocity = deltaY / deltaT; // px per ms
+  }
+  lastGlobalScrollY = window.scrollY;
+  lastGlobalScrollTime = now;
+
   updateGlassIndicator();
   updateNavProgress();
 });
