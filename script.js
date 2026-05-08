@@ -194,7 +194,7 @@ const UI_LABELS = {
 const projectDetails = {
   1: {
     title: "Lego EV3 Roboter",
-    shortDesc: "Ein Lego EV3 Roboter, den ich programmiert habe, um verschiedene Aufgaben zu erfüllen.",
+    shortDesc: "Ein Lego EV3 Roboter, den ich programmiert habe, um verschiedene Hindernisse zu überwinden",
     fullDesc:
       "In diesem Projekt habe ich einen Lego EV3 Roboter programmiert, um verschiedene Aufgaben zu erfüllen. Der Roboter kann Linien folgen, Hindernissen ausweichen und einfache Bewegungsabläufe ausführen. Durch die Verwendung von Python und der EV3-Programmierumgebung konnte ich die Funktionen des Roboters erweitern und anpassen. Das Projekt ist ein fortlaufendes Experimentieren mit der Robotik, um die Möglichkeiten des EV3-Kits voll auszuschöpfen. Momentan beschäftige ich mich mit Hinderniss Räumung per Kranarm.",
     technologies: ["Python", "EV3"],
@@ -205,7 +205,7 @@ const projectDetails = {
   },
   2: {
     title: "KI-Lagerhaltungs-System",
-    shortDesc: "Ein KI-gestütztes Lagerhaltungs-System durch Image erkennung.",
+    shortDesc: "Ein KI-gestütztes Lagerhaltungs-System durch Image-Erkennung",
     fullDesc:
       "Am Hackathon Baden Hackt 2026, habe ich in einem Team von 2 Personen ein KI-gestütztes Lagerhaltungs-System entwickelt, das mithilfe von Bilderkennung die Lagerbestände automatisch verwalten kann und auf Bedarf auch Email senden zum Nachfüllen. Durch den Einsatz von Python und YOLO V8 konnten wir eine effiziente Lösung schaffen, die es ermöglicht, den Lagerbestand in Echtzeit zu überwachen und Engpässe frühzeitig zu erkennen. Das Projekt wurde innerhalb von 2 Tagen erfolgreich umgesetzt und demonstriert die Möglichkeiten der KI in der Logistikbranche.",
     technologies: ["Python", "YOLO V8"],
@@ -228,7 +228,7 @@ const projectDetails = {
   },
   4: {
     title: "MineSweeper",
-    shortDesc: "Ein klassisches Minesweeper-Spiel als eine Web-App entwickelt.",
+    shortDesc: "Ein originelles Minesweeper-Spiel als eine Web-App entwickelt",
     fullDesc:
       "In diesem Projekt habe ich ein klassisches Minesweeper-Spiel als Web-App entwickelt. Das Design ist einfach und benutzerfreundlich, mit klaren Grafiken und intuitiven Bedienelementen. Wie auch meine anderen Spiele, ist es möglich dieses am Handy auszuprobieren. Das Spiel bietet eine unterhaltsame Möglichkeit, Logik und Strategie zu üben, während es gleichzeitig an das nostalgische Gefühl des Originalspiels erinnert.",
     technologies: ["HTML", "CSS", "JavaScript"],
@@ -243,6 +243,34 @@ const projectDetails = {
 let isDarkMode = true; // Always dark mode
 let currentProject = null;
 let currentSkill = null;
+
+function getYouTubeEmbedUrl(url) {
+  if (!url) return '';
+
+  try {
+    const parsedUrl = new URL(url);
+
+    if (parsedUrl.hostname.includes('youtu.be')) {
+      const videoId = parsedUrl.pathname.replace(/^\//, '').trim();
+      return videoId ? `https://www.youtube.com/embed/${videoId}` : url;
+    }
+
+    if (parsedUrl.hostname.includes('youtube.com')) {
+      if (parsedUrl.pathname === '/watch') {
+        const videoId = parsedUrl.searchParams.get('v');
+        return videoId ? `https://www.youtube.com/embed/${videoId}` : url;
+      }
+
+      if (parsedUrl.pathname.startsWith('/embed/')) {
+        return url;
+      }
+    }
+  } catch {
+    return url;
+  }
+
+  return url;
+}
 
 const skillDetails = {
   frontend: {
@@ -619,6 +647,13 @@ function bindGlassHoverTargets() {
   const header = document.querySelector('header');
   const navLinks = Array.from(document.querySelectorAll('.glass-nav-container .nav-link'));
   const hoverTargets = navLinks.filter(Boolean);
+  const isTouchDevice = window.matchMedia('(hover: none), (pointer: coarse)').matches;
+
+  if (isTouchDevice) {
+    hoveredGlassTarget = null;
+    updateGlassIndicator();
+    return;
+  }
 
   hoverTargets.forEach((target) => {
     target.addEventListener('pointerenter', () => {
@@ -675,12 +710,13 @@ function showProjectDetail(projectId) {
   const project = projectDetails[projectId];
   const modal = document.getElementById("projectModal");
   const detailContainer = document.getElementById("projectDetail");
+  const videoSrc = getYouTubeEmbedUrl(project.videoUrl);
 
   // Build video section if videoUrl exists
-  const videoSection = project.videoUrl ? `
+  const videoSection = videoSrc ? `
     <div class="project-video">
       <iframe 
-        src="${project.videoUrl}" 
+        src="${videoSrc}" 
         frameborder="0" 
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
         allowfullscreen>
@@ -749,13 +785,15 @@ function showProjectDetail(projectId) {
 
   modal.style.display = "flex";
   document.body.style.overflow = "hidden";
+  document.documentElement.style.overflow = "hidden"; // NEU
 }
 
 function closeProjectDetail() {
   currentProject = null;
   const modal = document.getElementById("projectModal");
   modal.style.display = "none";
-  document.body.style.overflow = "auto";
+  document.body.style.overflow = "";
+  document.documentElement.style.overflow = "";
 }
 
 function showSkillDetail(skillKey) {
@@ -797,13 +835,15 @@ function showSkillDetail(skillKey) {
 
   modal.style.display = "flex";
   document.body.style.overflow = "hidden";
+  document.documentElement.style.overflow = "hidden";
 }
 
 function closeSkillDetail() {
   currentSkill = null;
   const modal = document.getElementById("skillModal");
   modal.style.display = "none";
-  document.body.style.overflow = "auto";
+  document.body.style.overflow = "";
+  document.documentElement.style.overflow = "";
 }
 
 function updateProjectCards() {
@@ -854,10 +894,11 @@ function showDynamicProject(project) {
   const projectData = project;
   const modal = document.getElementById("projectModal");
   const detailContainer = document.getElementById("projectDetail");
+  const videoSrc = getYouTubeEmbedUrl(project.videoUrl);
   
-  const videoSection = project.videoUrl ? `
+  const videoSection = videoSrc ? `
     <div class="project-video">
-      <iframe src="${project.videoUrl}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      <iframe src="${videoSrc}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
     </div>
   ` : (project.imageUrl ? `<div class="project-image"><img src="${project.imageUrl}" alt="${projectData.title}" style="width:100%;max-height:500px;object-fit:contain;border-radius:15px;"></div>` : '');
   

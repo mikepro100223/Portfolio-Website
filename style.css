@@ -18,6 +18,8 @@
 
 html {
     scroll-behavior: smooth;
+    min-height: 100%;
+    background-color: #0c1520;
 }
 
 body {
@@ -26,6 +28,10 @@ body {
     color: #e0f2fe;
     background: linear-gradient(135deg, #0c1520 0%, #164e63 50%, #083344 100%);
     background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-size: 100% calc(100% + 240px);
+    background-position: center top;
+    min-height: 100vh;
     overflow-x: hidden;
     position: relative;
 }
@@ -1380,7 +1386,6 @@ body.dark-mode .social-link:hover {
     box-shadow: 0 10px 30px rgba(6, 182, 212, 0.4);
 }
 
-/* Modal */
 .modal {
     display: none;
     position: fixed;
@@ -1388,12 +1393,16 @@ body.dark-mode .social-link:hover {
     left: 0;
     top: 0;
     width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.8);
+    height: 100vh;
+    height: 100dvh;
+    background-color: rgba(0, 0, 0, 0.01);
     backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
     justify-content: center;
     align-items: center;
     animation: fadeIn 0.3s ease;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
 }
 
 @keyframes fadeIn {
@@ -1851,6 +1860,31 @@ footer p {
     html {
         font-size: 14px;
     }
+
+    .modal {
+        align-items: stretch;
+        padding: 0;
+        background-color: transparent;
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+        justify-content: flex-start;
+        overflow-y: auto;
+        height: 100%;
+        height: 100dvh;
+    }
+
+    .modal-content {
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+        min-height: 100dvh;
+        padding: 1.5rem;
+        background: rgba(12, 21, 32, 0.95);
+        box-shadow: none;
+        border: none;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+    }
     
     nav ul {
         flex-direction: row;
@@ -2026,14 +2060,6 @@ footer p {
         grid-template-columns: 1fr;
     }
     
-    /* Modal Mobile */
-    .modal-content {
-        width: 95%;
-        max-width: 100%;
-        padding: 1.5rem;
-        max-height: 95vh;
-    }
-    
     .project-detail-header h2,
     .skill-detail-title h2 {
         font-size: 1.5rem;
@@ -2066,6 +2092,10 @@ footer p {
         padding: 1.5rem 1rem !important;
     }
 
+    body {
+        min-height: 100dvh;
+    }
+
     .hero-emoji {
         font-size: 2rem;
     }
@@ -2087,11 +2117,6 @@ footer p {
         padding: 0.8rem 2rem;
         font-size: 1rem;
         width: 100%;
-    }
-
-    .modal-content {
-        width: 95%;
-        padding: 2rem 1.5rem;
     }
 
     .project-detail-header h2 {
