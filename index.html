@@ -1,259 +1,181 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="theme-color" content="#164e63">
-    <title>Mein Portfolio</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f2eb">
+  <meta name="description" content="Portfolio von Yucan You aus Aarau – Projekte, Kenntnisse, Interessen und Kontakt.">
+  <title>Yucan You — IMS Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <canvas id="particleCanvas"></canvas>
-    
-    <!-- SVG Liquid Glass Filter -->
-    <svg style="display:none;">
-      <defs>
-                <filter id="liquid-glass-filter" x="-100%" y="-100%" width="300%" height="300%" color-interpolation-filters="sRGB">
-                    <feturbulence type="fractalNoise" basefrequency="0.02" numoctaves="3" result="noise" seed="2" />
-                    <fedisplacementmap in="SourceGraphic" in2="noise" scale="8" xchannelselector="R" ychannelselector="G" />
-        </filter>
-      </defs>
-    </svg>
+  <header class="site-header">
+    <a class="wordmark" href="#start" aria-label="Zur Startseite">YY<span>.</span></a>
+    <nav aria-label="Hauptnavigation">
+      <a href="#profil">Profil</a>
+      <a href="#hobbys">Hobbys</a>
+      <a href="#projekte">Projekte</a>
+      <a href="#kenntnisse">Kenntnisse</a>
+      <a href="#kontakt">Kontakt</a>
+    </nav>
+    <a class="header-contact" href="mailto:yucan.you100223@outlook.de">Schreib mir</a>
+  </header>
 
-    <header>
-        <div class="glass-name-container">
-            <div class="name-bubble">Yucan You</div>
+  <main>
+    <section class="hero" id="start">
+      <div class="hero-copy reveal">
+        <p class="eyebrow"><span></span> IMS-Schüler aus Aarau</p>
+        <h1>Ich entwickle Ideen<br>zu <em>funktionierenden</em><br>Projekten.</h1>
+        <p class="hero-intro">Ich bin Yucan You und besuche die Informatikmittelschule an der Alten Kantonsschule Aarau. Hier zeige ich Projekte, an denen ich gearbeitet habe, Technologien, die ich nutze, und Themen, die mich auch ausserhalb des Programmierens interessieren.</p>
+        <div class="hero-actions">
+          <a class="button primary" href="#projekte">Meine Projekte</a>
+          <a class="button text-link" href="#kontakt">Kontakt! <span aria-hidden="true">→</span></a>
         </div>
-        <div class="glass-indicator" aria-hidden="true"></div>
-        <div class="glass-nav-container">
-            <nav role="navigation" aria-label="Main navigation">
-                <ul>
-                    <li><a href="#home" class="glass-item nav-link">Startseite</a></li>
-                    <li><a href="#about" class="glass-item nav-link">Über mich</a></li>
-                    <li><a href="#skills" class="glass-item nav-link">Skills</a></li>
-                    <li><a href="#projects" class="glass-item nav-link">Projekte</a></li>
-                    <li><a href="#contact" class="glass-item nav-link">Kontakt</a></li>
-                </ul>
-            </nav>
+      </div>
+      <aside class="hero-card reveal" aria-label="Kurzprofil">
+        <div class="portrait-mark" aria-hidden="true">YY</div>
+        <div>
+          <p class="card-kicker">Aktuell</p>
+          <h2>Informatikmittelschule</h2>
+          <p>Alte Kantonsschule Aarau<br>seit 2024</p>
         </div>
-    </header>
-    
-    <main>
-        <section id="home" class="hero-section">
-            <div class="hero-content fade-in">
-                <div class="hero-emoji">👋</div>
-                <h2 class="hero-title">Das bin Ich.</h2>
-                <p class="hero-subtitle">Willkommen auf meiner Portfolio-Website.</p>
-                <div class="hero-cta">
-                    <a href="#projects" class="cta-button primary">Projekte ansehen</a>
-                    <a href="#contact" class="cta-button secondary">Kontakt aufnehmen</a>
-                </div>
-            </div>
-            <div class="scroll-indicator">
-                <span>↓</span>
-            </div>
-        </section>
+        <div class="availability"><span></span>Offen für neue Projekte und Austausch</div>
+      </aside>
+    </section>
 
-        <section id="about">
-            <div class="section-header">
-                <h2>Über mich</h2>
-                <div class="section-divider"></div>
-            </div>
-            <div class="about-content">
-                <div class="about-text">
-                    <p class="highlight-text">Ich bin ein leidenschaftlicher Informatiker mit kreativen Ideen und innovativen Lösungen.</p>
-                </div>
-                <div class="about-timeline">
-                    <div class="timeline-entry timeline-entry-left reveal">
-                        <div class="timeline-card">
-                            <h3>Geboren</h3>
-                            <p>in Aarau.</p>
-                        </div>
-                        <div class="timeline-point">
-                            <div class="timeline-year">2010</div>
-                        </div>
-                        <div class="timeline-spacer"></div>
-                    </div>
-                    <div class="timeline-entry timeline-entry-right reveal">
-                        <div class="timeline-spacer"></div>
-                        <div class="timeline-point">
-                            <div class="timeline-year">2016</div>
-                        </div>
-                        <div class="timeline-card">
-                            <h3>Primarschule</h3>
-                            <p>in Aarau Rohr gestartet. 2. Klasse Übersprungen.</p>
-                        </div>
-                    </div>
-                    <div class="timeline-entry timeline-entry-left reveal">
-                        <div class="timeline-card">
-                            <h3>Bezirksschule</h3>
-                            <p>in Buchs an der Suhrenmatte.</p>
-                        </div>
-                        <div class="timeline-point">
-                            <div class="timeline-year">2021</div>
-                        </div>
-                        <div class="timeline-spacer"></div>
-                    </div>
-                    <div class="timeline-entry timeline-entry-right reveal">
-                        <div class="timeline-spacer"></div>
-                        <div class="timeline-point">
-                            <div class="timeline-year">Oktober 2022</div>
-                        </div>
-                        <div class="timeline-card">
-                            <h3>Schnuppertag</h3>
-                            <p>bei der KSAB in Gönhard, 1 Tag lang als ICT-Informatiker.</p>
-                        </div>
-                    </div>
-                    <div class="timeline-entry timeline-entry-left reveal">
-                        <div class="timeline-card">
-                            <h3>Informatikmittelschule</h3>
-                            <p>in Aarau an der Alten Kantonsschule.</p>
-                        </div>
-                        <div class="timeline-point">
-                            <div class="timeline-year">2024 - jetzt</div>
-                        </div>
-                        <div class="timeline-spacer"></div>
-                    </div>
-                </div>
-                <div class="about-stats">
-                    <div class="stat-card">
-                        <div class="stat-number" data-target="10">0</div>
-                        <div class="stat-label">Projekte</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number" data-target="17">0</div>
-                        <div class="stat-label">Technologien</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number" data-target="250">0</div>
-                        <div class="stat-label">Commits</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="skills">
-            <div class="section-header">
-                <h2>Skills & Technologien</h2>
-                <div class="section-divider"></div>
-            </div>
-            <div class="skills-grid">
-                <div class="skill-card">
-                    <div class="skill-icon">🎨</div>
-                    <h3>Frontend</h3>
-                    <div class="skill-tags">
-                        <span class="skill-tag">HTML</span>
-                        <span class="skill-tag">CSS</span>
-                        <span class="skill-tag">JavaScript</span>
-                        <span class="skill-tag">React.js</span>
-                    </div>
-                </div>
-                <div class="skill-card">
-                    <div class="skill-icon">⚙️</div>
-                    <h3>Backend</h3>
-                    <div class="skill-tags">
-                        <span class="skill-tag">Node.js</span>
-                        <span class="skill-tag">Python</span>
-                        <span class="skill-tag">SQL</span>
-                        <span class="skill-tag">MongoDB</span>
-                        <span class="skill-tag">C#</span>
-                        <span class="skill-tag">.NET</span>
-                    </div>
-                </div>
-                <div class="skill-card">
-                    <div class="skill-icon">🛠️</div>
-                    <h3>Tools</h3>
-                    <div class="skill-tags">
-                        <span class="skill-tag">EV3</span>
-                        <span class="skill-tag">VS Code</span>
-                        <span class="skill-tag">Git</span>
-                        <span class="skill-tag">Docker</span>
-                        <span class="skill-tag">PowerShell</span>
-                        <span class="skill-tag">YOLO V8</span>
-                        <span class="skill-tag">Figma</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="projects">
-            <div class="section-header">
-                <h2>Projekte</h2>
-                <div class="section-divider"></div>
-            </div>
-            <div class="projects-grid">
-            </div>
-        </section>
-
-    </main>
-
-    <footer id="contact">
-    <p class="footer-copy">&copy; 2026 Yucan You</p>
-
-    <div class="footer-grid">
-
-        <div class="footer-item">
-            <span class="footer-icon">📧</span>
-            <div>
-                <div>Email</div>
-                <a href="mailto:yucan.you100223@outlook.de">
-                    yucan.you100223@outlook.de
-                </a>
-            </div>
+    <section class="profile section" id="profil">
+      <div class="section-label">01 / Profil</div>
+      <div class="profile-grid">
+        <div>
+          <p class="eyebrow">Über mich</p>
+          <h2>Neugierig, zuverlässig und gerne mittendrin.</h2>
         </div>
-
-        <div class="footer-item">
-            <span class="footer-icon">📱</span>
-            <div>
-                <div>Telefon</div>
-                <a href="tel:+41787136541">
-                    +41 78 713 65 41
-                </a>
-            </div>
+        <div class="profile-copy">
+          <p>Mich interessiert, wie aus einer Idee eine Lösung wird, die im Alltag tatsächlich funktioniert. Besonders gerne arbeite ich an Webanwendungen, programmiere mit Python und C# oder verbinde Software mit Robotik.</p>
+          <p>Bei eigenen Projekten lerne ich, Probleme selbstständig zu zerlegen, Fehler systematisch zu finden und Ergebnisse verständlich zu präsentieren. Dabei probiere ich gerne Neues aus und entwickle meine Arbeitsweise mit jedem Projekt weiter.</p>
         </div>
+      </div>
+      <div class="profile-timeline" aria-label="Mein bisheriger Weg">
+        <article class="timeline-item reveal">
+          <time datetime="2010">2010</time>
+          <div><h3>Geboren</h3><p>in Aarau.</p></div>
+        </article>
+        <article class="timeline-item reveal">
+          <time datetime="2016">2016</time>
+          <div><h3>Primarschule</h3><p>in Aarau Rohr gestartet. 2. Klasse Übersprungen.</p></div>
+        </article>
+        <article class="timeline-item reveal">
+          <time datetime="2021">2021</time>
+          <div><h3>Bezirksschule</h3><p>in Buchs an der Suhrenmatte.</p></div>
+        </article>
+        <article class="timeline-item reveal">
+          <time datetime="2022-10">Oktober 2022</time>
+          <div><h3>Schnuppertag</h3><p>bei der KSAB in Gönhard, 1 Tag lang als ICT-Informatiker.</p></div>
+        </article>
+        <article class="timeline-item reveal">
+          <time datetime="2024">2024 - jetzt</time>
+          <div><h3>Informatikmittelschule</h3><p>in Aarau an der Alten Kantonsschule.</p></div>
+        </article>
+      </div>
+    </section>
 
-        <div class="footer-item">
-            <span class="footer-icon">📍</span>
-            <div>
-                <div>Adresse</div>
-                <span>
-                    Trieschäckerstrasse 82<br>
-                    5032 Aarau Rohr Schweiz
-                </span>
-            </div>
+    <section class="hobbies section" id="hobbys">
+      <div class="section-label">02 / Hobbys</div>
+      <div class="hobby-grid">
+        <div class="hobby-heading">
+          <p class="eyebrow">Abseits vom Code</p>
+          <h2>Fotografie</h2>
         </div>
-
-        <a class="footer-item" href="https://github.com/mikepro100223" target="_blank">
-            <span class="footer-icon">🐙</span>
-            <div>
-                <div>GitHub</div>
-                <span>mikepro100223</span>
-            </div>
-        </a>
-
-        <a class="footer-item" href="https://www.linkedin.com/in/yucan-you-121034395/" target="_blank">
-            <span class="footer-icon">💼</span>
-            <div>
-                <div>LinkedIn</div>
-                <span>Profil öffnen</span>
-            </div>
-        </a>
-
-    </div>
-</footer>
-
-    <div id="projectModal" class="modal">
-        <div class="modal-content">
-            <div id="projectDetail"></div>
+        <div class="hobby-copy">
+          <p>Mit der Kamera halte ich Momente, Licht und Perspektiven fest, die im Alltag leicht übersehen werden. Fotografie ist für mich ein kreativer Ausgleich zum Programmieren und schärft meinen Blick für Bildaufbau, Farben und Details.</p>
+          <p>Am meisten interessiert mich, wie sich dieselbe Szene durch einen anderen Ausschnitt, einen neuen Blickwinkel oder verändertes Licht völlig anders erzählen lässt.</p>
         </div>
-    </div>
-    
-    <div id="skillModal" class="modal">
-        <div class="modal-content">
-            <div id="skillDetail"></div>
+        <figure class="photography-hero reveal" data-photo-hero>
+          <img src="images/photography-main.jpg" alt="Eine Korean-Air-Maschine vor einem SWISS-Flugzeug am Flughafen" loading="lazy" decoding="async">
+          <figcaption>
+            <span>Spotting / Flughafen Zürich</span>
+            <strong>Bewegung in einem stillen Moment.</strong>
+          </figcaption>
+        </figure>
+        <div class="hobby-controls">
+          <div class="theme-joke">
+            <p><span>Kleiner Fotografen-Konflikt:</span><strong>Ich mag Dark Mode – bis jemand «mehr Licht» verlangt.</strong></p>
+            <button class="theme-toggle" id="themeToggle" type="button" aria-label="Farbschema wechseln" aria-pressed="false">
+              <span class="theme-toggle-icon" aria-hidden="true"></span>
+              <span class="theme-toggle-text">Licht aus</span>
+            </button>
+          </div>
+          <div class="photo-focus" data-photo-focus>
+            <button class="focus-dial" type="button" aria-label="Fotografischen Fokus wechseln">
+              <span class="focus-ring" aria-hidden="true"></span>
+              <span class="focus-label">Fokus</span>
+            </button>
+            <div class="focus-output" aria-live="polite">
+              <span>01 / Licht</span>
+              <strong>Licht macht aus einem Augenblick eine Stimmung.</strong>
+              <small>Klicken, um die Perspektive zu wechseln</small>
+            </div>
+          </div>
         </div>
-    </div>
-    <script src="script.js"></script>
+      </div>
+    </section>
+
+    <section class="projects section" id="projekte">
+      <div class="section-label">03 / Projekte</div>
+      <div class="section-heading">
+        <div><p class="eyebrow">Ausgewählte Arbeiten</p><h2>Von Robotik bis Web.</h2></div>
+        <p>Vier Projekte, an denen ich technische Grundlagen praktisch angewendet und eigene Ideen umgesetzt habe.</p>
+      </div>
+      <div class="project-list" id="projectList"></div>
+    </section>
+
+    <section class="skills section" id="kenntnisse">
+      <div class="section-label">04 / Kenntnisse</div>
+      <div class="section-heading">
+        <div><p class="eyebrow">Mein Werkzeugkasten</p><h2>Technologien, mit denen ich arbeite.</h2></div>
+        <p>Mein Fokus liegt auf soliden Grundlagen. Die Kenntnisse baue ich laufend durch Unterricht und eigene Projekte aus.</p>
+      </div>
+      <div class="skill-groups">
+        <article><span class="skill-number">01</span><h3>Web</h3><p>HTML, CSS, JavaScript, React, Node.js</p></article>
+        <article><span class="skill-number">02</span><h3>Programmierung</h3><p>Python, C#, .NET, SQL, MongoDB</p></article>
+        <article><span class="skill-number">03</span><h3>Tools & Praxis</h3><p>Git, Docker, VS Code, Figma, EV3, YOLOv8</p></article>
+      </div>
+      <div class="working-style">
+        <p>Was ich mitbringe</p>
+        <ul>
+          <li>Selbstständiges Einarbeiten</li><li>Strukturiertes Problemlösen</li>
+          <li>Offenheit für Feedback</li><li>Freude an Teamarbeit</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="contact section" id="kontakt">
+      <p class="eyebrow light">Kontakt</p>
+      <h2>Lernen wir uns kennen.</h2>
+      <p>Du möchtest mehr über eines meiner Projekte erfahren, dich austauschen oder mit mir zusammenarbeiten? Ich freue mich über eine Nachricht.</p>
+      <a class="contact-mail" href="mailto:yucan.you100223@outlook.de">yucan.you100223@outlook.de <span aria-hidden="true">↗</span></a>
+      <div class="contact-links">
+        <a href="tel:+41787136541">+41 78 713 65 41</a>
+        <a href="https://github.com/mikepro100223" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="https://www.linkedin.com/in/yucan-you-121034395/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        <span>Aarau, Schweiz</span>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <a class="wordmark" href="#start">YY<span>.</span></a>
+    <p>Portfolio von Yucan You</p>
+    <p>© <span id="year"></span></p>
+  </footer>
+
+  <dialog id="projectDialog" aria-labelledby="dialogTitle">
+    <button class="dialog-close" type="button" aria-label="Projekt schliessen">Schliessen</button>
+    <div id="projectDetail"></div>
+  </dialog>
+  <script src="script.js"></script>
 </body>
 </html>
