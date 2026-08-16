@@ -21,7 +21,14 @@
       <a href="#kenntnisse">Kenntnisse</a>
       <a href="#kontakt">Kontakt</a>
     </nav>
-    <a class="header-contact" href="mailto:yucan.you100223@outlook.de">Schreib mir</a>
+    <div class="header-actions">
+      <button class="tour-trigger" id="tourTrigger" type="button" aria-pressed="false">
+        <span class="tour-trigger-icon"><svg viewBox="0 0 64 36" aria-hidden="true"><path d="M2 18h18L34 3h7l-7 15h17l8-6h4l-4 10-25 2 7 9h-7L20 24H2l-1-3Z"/></svg></span>
+        <span class="tour-trigger-copy"><small>Geführte Tour</small><strong class="tour-trigger-label">Entdecken</strong></span>
+        <span class="tour-trigger-arrow" aria-hidden="true">→</span>
+      </button>
+      <a class="header-contact" href="mailto:yucan.you100223@outlook.de">Schreib mir</a>
+    </div>
   </header>
 
   <main>
@@ -91,13 +98,13 @@
         </div>
         <div class="hobby-copy">
           <p>Mit der Kamera halte ich Momente, Licht und Perspektiven fest, die im Alltag leicht übersehen werden. Fotografie ist für mich ein kreativer Ausgleich zum Programmieren und schärft meinen Blick für Bildaufbau, Farben und Details.</p>
-          <p>Am meisten interessiert mich, wie sich dieselbe Szene durch einen anderen Ausschnitt, einen neuen Blickwinkel oder verändertes Licht völlig anders erzählen lässt.</p>
+          <p>Meine Motive reichen vom Plane Spotting bis zur Automotive-Fotografie. Besonders interessiert mich, wie ein anderer Ausschnitt, ein neuer Blickwinkel oder verändertes Licht dieselbe Szene völlig neu erzählen kann.</p>
         </div>
         <figure class="photography-hero reveal" data-photo-hero>
-          <img src="images/photography-main.jpg" alt="Eine Korean-Air-Maschine vor einem SWISS-Flugzeug am Flughafen" loading="lazy" decoding="async">
+          <img src="images/photography-main.jpg" alt="Eine Korean-Air-Maschine vor einem SWISS-Flugzeug am Flughafen" loading="lazy" decoding="async" data-photo-image>
           <figcaption>
-            <span>Spotting / Flughafen Zürich</span>
-            <strong>Bewegung in einem stillen Moment.</strong>
+            <span data-photo-meta>Spotting / Flughafen Zürich</span>
+            <strong data-photo-caption>Korean Air und SWISS am Flughafen Zürich.</strong>
           </figcaption>
         </figure>
         <div class="hobby-controls">
@@ -176,6 +183,7 @@
     <button class="dialog-close" type="button" aria-label="Projekt schliessen">Schliessen</button>
     <div id="projectDetail"></div>
   </dialog>
+  <div class="flight-layer" id="flightLayer" aria-live="polite"></div>
   <script src="script.js"></script>
 </body>
 </html>

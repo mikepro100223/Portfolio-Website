@@ -131,20 +131,255 @@ if (systemTheme.addEventListener) {
 updateThemeButton();
 
 const photoHero = document.querySelector("[data-photo-hero]");
-photoHero?.addEventListener("pointermove", event => {
-  const bounds = photoHero.getBoundingClientRect();
-  const x = (event.clientX - bounds.left) / bounds.width;
-  const y = (event.clientY - bounds.top) / bounds.height;
-  photoHero.style.setProperty("--photo-x", `${x * 100}%`);
-  photoHero.style.setProperty("--photo-y", `${y * 100}%`);
-});
-photoHero?.addEventListener("pointerleave", () => {
-  photoHero.style.setProperty("--photo-x", "50%");
-  photoHero.style.setProperty("--photo-y", "50%");
+const photoHeroImage = photoHero?.querySelector("[data-photo-image]");
+const photoHeroMeta = photoHero?.querySelector("[data-photo-meta]");
+const photoHeroCaption = photoHero?.querySelector("[data-photo-caption]");
+const photoSlides = [
+  {
+    src: "images/photography-main.jpg",
+    alt: "Eine Korean-Air-Maschine vor einem SWISS-Flugzeug am Flughafen",
+    meta: "Spotting / Flughafen Zürich",
+    caption: "Korean Air und SWISS am Flughafen Zürich."
+  },
+  {
+    src: "images/gallery/DSC00032.jpg",
+    alt: "Ein SWISS Airbus A340 im Anflug über der Landschaft",
+    meta: "Spotting / Anflug Zürich",
+    caption: "Ein SWISS Airbus A340 im Landeanflug."
+  },
+  {
+    src: "images/gallery/DSC00500.jpg",
+    alt: "Nahaufnahme des Weissach-RS-Schriftzugs an einem Porsche",
+    meta: "Automotive / Porsche",
+    caption: "Ein Weissach Porsche GT3 RS"
+  },
+  {
+    src: "images/gallery/DSC00830.jpg",
+    alt: "Vier blaue Porsche-Sportwagen in einer Reihe",
+    meta: "Automotive / Porsche",
+    caption: "Porsche GT3 & GT4 RS",
+    desktopCaptionLines: ["Porsche GT3 ", "& GT4 RS"]
+  },
+  {
+    src: "images/gallery/DSC01179.jpg",
+    alt: "Ein goldener Lamborghini Aventador SVJ auf einer Strasse",
+    meta: "Automotive / Lamborghini",
+    caption: "Aventador SVJ",
+    captionTop: true
+  }
+];
+let photoSlideIndex = 0;
+let photoRotation;
+let photoRotationPaused = false;
+
+function showNextPhoto() {
+  if (!photoHeroImage || document.hidden) return;
+  photoHero.classList.add("is-changing");
+  photoHeroImage.classList.add("is-changing");
+  window.setTimeout(() => {
+    photoSlideIndex = (photoSlideIndex + 1) % photoSlides.length;
+    const slide = photoSlides[photoSlideIndex];
+    photoHeroImage.src = slide.src;
+    photoHeroImage.alt = slide.alt;
+    photoHero.classList.toggle("caption-top",Boolean(slide.captionTop));
+    photoHeroMeta.textContent = slide.meta;
+    photoHeroCaption.textContent = "";
+    if (slide.desktopCaptionLines) {
+      photoHeroCaption.append(document.createTextNode(slide.desktopCaptionLines[0]));
+      const desktopBreak = document.createElement("br");
+      desktopBreak.className = "desktop-caption-break";
+      photoHeroCaption.append(desktopBreak,document.createTextNode(slide.desktopCaptionLines[1]));
+    } else {
+      photoHeroCaption.textContent = slide.caption;
+    }
+    const imageReady = photoHeroImage.decode ? photoHeroImage.decode() : Promise.resolve();
+    imageReady.catch(() => {}).finally(() => {
+      photoHero.classList.remove("is-changing");
+      photoHeroImage.classList.remove("is-changing");
+    });
+  },450);
+}
+
+function startPhotoRotation(delay = 5000) {
+  window.clearTimeout(photoRotation);
+  if (photoRotationPaused) return;
+  photoRotation = window.setTimeout(() => {
+    showNextPhoto();
+    startPhotoRotation();
+  },delay);
+}
+
+if (photoHeroImage && photoSlides.length > 1) {
+  photoSlides.slice(1).forEach(slide => {
+    const preload = new Image();
+    preload.src = slide.src;
+  });
+  startPhotoRotation(2500);
+  const canPausePhotoRotation = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  if (canPausePhotoRotation) {
+    photoHero.addEventListener("pointerenter", () => {
+      photoRotationPaused = true;
+      window.clearTimeout(photoRotation);
+    });
+    photoHero.addEventListener("pointerleave", () => {
+      photoRotationPaused = false;
+      startPhotoRotation();
+    });
+  }
+}
+
+const tourTrigger = document.querySelector("#tourTrigger");
+const flightLayer = document.querySelector("#flightLayer");
+const tourStops = [
+  { id: "start",title: "Willkommen",message: "Ein kurzer Überblick über mich.",x: .22,y: 8 },
+  { id: "profil",title: "Mein Weg",message: "Meine Ausbildung auf einen Blick.",x: .72,y: -10 },
+  { id: "hobbys",title: "Fotografie",message: "Mein Ausgleich neben dem Code.",x: .34,y: 12 },
+  { id: "projekte",title: "Projekte",message: "Eine Auswahl meiner Arbeiten.",x: .67,y: -6 },
+  { id: "kenntnisse",title: "Kenntnisse",message: "Technologien, die ich einsetze.",x: .26,y: 10 },
+  { id: "kontakt",title: "Kontakt",message: "Hier kannst du mich erreichen.",x: .62,y: -8 }
+];
+const tourPlaneShape = `<svg viewBox="0 0 512 480" aria-hidden="true">
+  <path class="plane-body" d="M480 192H366L261 9Q254 0 243 0h-47q-9 0-4 10l80 182H160l-65-81q-5-7-13-7H53q-9 0-4 11l47 77H48q-20 0-34 14T0 240t14 34 34 14h48l-47 77q-5 11 7 13h26q8 0 13-7l65-83h112l-80 182q-4 10 4 10h47q11 0 18-9l105-183h114q32 0 32-32v-32q0-32-32-32Z"/>
+  <path class="plane-detail" d="M365 192 326 240l40 48M96 192l30 48-30 48"/>
+</svg>`;
+let tourRun = 0;
+
+const pause = duration => new Promise(resolve => window.setTimeout(resolve,duration));
+
+function stopTour() {
+  tourRun += 1;
+  flightLayer.replaceChildren();
+  tourTrigger.setAttribute("aria-pressed","false");
+  tourTrigger.querySelector(".tour-trigger-label").textContent = "Entdecken";
+}
+
+async function startTour() {
+  const currentRun = ++tourRun;
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const plane = document.createElement("div");
+  const tooltip = document.createElement("div");
+  const progress = document.createElement("span");
+  const title = document.createElement("strong");
+  const copy = document.createElement("p");
+  let currentX = window.innerWidth - 104;
+  let currentY = 22;
+  let facingDirection = 1;
+
+  plane.className = "tour-plane";
+  plane.innerHTML = tourPlaneShape;
+  plane.style.transform = `translate3d(${currentX}px,${currentY}px,0)`;
+  tooltip.className = "tour-tooltip";
+  tooltip.append(progress,title,copy);
+  flightLayer.replaceChildren(plane,tooltip);
+  tourTrigger.setAttribute("aria-pressed","true");
+  tourTrigger.querySelector(".tour-trigger-label").textContent = "Stoppen";
+
+  for (let index = 0; index < tourStops.length; index += 1) {
+    if (currentRun !== tourRun) return;
+    const stop = tourStops[index];
+    const section = document.getElementById(stop.id);
+    const anchor = section.querySelector(".section-label,.eyebrow,h1,h2") || section;
+    const anchorRect = anchor.getBoundingClientRect();
+    const documentHeight = document.documentElement.scrollHeight;
+    const anchorDocumentTop = anchorRect.top + window.scrollY;
+    const desiredAnchorTop = 128 + index % 3 * 26;
+    const targetScrollY = Math.max(0,Math.min(documentHeight - window.innerHeight,anchorDocumentTop - desiredAnchorTop));
+    const finalAnchorTop = anchorDocumentTop - targetScrollY;
+    const rect = {
+      top: finalAnchorTop,
+      bottom: finalAnchorTop + anchorRect.height,
+      height: anchorRect.height
+    };
+    const sideX = window.innerWidth * stop.x;
+    const nextX = Math.max(18,Math.min(window.innerWidth - 104,sideX));
+    const travelDirection = nextX < currentX ? -1 : 1;
+    tooltip.classList.remove("visible");
+
+    if (!reduceMotion && travelDirection !== facingDirection) {
+      plane.classList.add("turning");
+      const turnAnimation = plane.animate([
+        { transform: `translate3d(${currentX}px,${currentY}px,0) scaleX(${facingDirection})`, offset: 0 },
+        { transform: `translate3d(${currentX}px,${currentY}px,0) scaleX(${facingDirection * .12}) rotate(-2deg)`, offset: .46 },
+        { transform: `translate3d(${currentX}px,${currentY}px,0) scaleX(${travelDirection * .12}) rotate(2deg)`, offset: .54 },
+        { transform: `translate3d(${currentX}px,${currentY}px,0) scaleX(${travelDirection})`, offset: 1 }
+      ], { duration: 420,easing: "cubic-bezier(.4,0,.2,1)",fill: "forwards" });
+      try { await turnAnimation.finished; } catch (_) {}
+      turnAnimation.cancel();
+      plane.classList.remove("turning");
+      if (currentRun !== tourRun) return;
+    }
+    facingDirection = travelDirection;
+    plane.style.transform = `translate3d(${currentX}px,${currentY}px,0) scaleX(${facingDirection})`;
+
+    const planeAboveAnchor = rect.top > 150;
+    const anchorSideY = planeAboveAnchor ? rect.top - 54 : rect.bottom + 16;
+    const nextY = Math.max(82,Math.min(window.innerHeight - 150,anchorSideY + stop.y));
+    window.scrollTo({ top: targetScrollY,behavior: reduceMotion ? "auto" : "smooth" });
+
+    if (!reduceMotion) {
+      plane.classList.add("flying");
+      const deltaX = nextX - currentX;
+      const deltaY = nextY - currentY;
+      const distance = Math.hypot(deltaX,deltaY);
+      const arc = Math.min(155,Math.max(70,distance * .18));
+      const direction = travelDirection;
+      const climbBank = direction * -5;
+      const descentBank = direction * 4;
+      const routeOffset = (index % 3 - 1) * 18;
+      const flightLevel = Math.max(62,Math.min(currentY,nextY) - arc + routeOffset);
+      const curveXOne = currentX + deltaX * .2;
+      const curveXTwo = currentX + deltaX * .45;
+      const curveXThree = currentX + deltaX * .7;
+      const curveXFour = currentX + deltaX * .9;
+      const curveYOne = currentY + (flightLevel - currentY) * .62;
+      const curveYTwo = flightLevel;
+      const curveYThree = flightLevel + 5;
+      const curveYFour = nextY + (flightLevel - nextY) * .42;
+      const flightAnimation = plane.animate([
+        { transform: `translate3d(${currentX}px,${currentY}px,0) scaleX(${direction}) rotate(0deg)`, offset: 0 },
+        { transform: `translate3d(${curveXOne}px,${curveYOne}px,0) scaleX(${direction}) rotate(${climbBank}deg)`, offset: .2 },
+        { transform: `translate3d(${curveXTwo}px,${curveYTwo}px,0) scaleX(${direction}) rotate(0deg)`, offset: .45 },
+        { transform: `translate3d(${curveXThree}px,${curveYThree}px,0) scaleX(${direction}) rotate(0deg)`, offset: .7 },
+        { transform: `translate3d(${curveXFour}px,${curveYFour}px,0) scaleX(${direction}) rotate(${descentBank}deg)`, offset: .9 },
+        { transform: `translate3d(${nextX}px,${nextY}px,0) scaleX(${direction}) rotate(0deg)`, offset: 1 }
+      ], { duration: Math.min(1500,Math.max(900,distance * 1.35)),easing: "cubic-bezier(.4,.08,.2,1)",fill: "forwards" });
+      try { await flightAnimation.finished; } catch (_) {}
+      flightAnimation.cancel();
+      plane.classList.remove("flying");
+    }
+    if (currentRun !== tourRun) return;
+    currentX = nextX;
+    currentY = nextY;
+    plane.style.transform = `translate3d(${currentX}px,${currentY}px,0) scaleX(${travelDirection})`;
+
+    progress.textContent = `${String(index + 1).padStart(2,"0")} / ${String(tourStops.length).padStart(2,"0")}`;
+    title.textContent = stop.title;
+    copy.textContent = stop.message;
+    const tooltipWidth = Math.min(300,window.innerWidth - 32);
+    const tooltipHeight = tooltip.offsetHeight || 112;
+    const tooltipTargetX = nextX < window.innerWidth / 2 ? nextX + 96 : nextX - tooltipWidth - 18;
+    const tooltipLeft = Math.max(16,Math.min(window.innerWidth - tooltipWidth - 16,tooltipTargetX));
+    const spaceAbove = rect.top - 16;
+    const spaceBelow = window.innerHeight - rect.bottom - 16;
+    const placeAbove = spaceAbove >= tooltipHeight + 40 || spaceAbove > spaceBelow;
+    const tooltipTargetY = placeAbove ? rect.top - tooltipHeight - 28 : rect.bottom + 48;
+    const tooltipTop = Math.max(78,Math.min(window.innerHeight - tooltipHeight - 16,tooltipTargetY));
+    tooltip.style.left = `${tooltipLeft}px`;
+    tooltip.style.top = `${tooltipTop}px`;
+    tooltip.classList.add("visible");
+    await pause(reduceMotion ? 1050 : 1500);
+  }
+
+  if (currentRun === tourRun) stopTour();
+}
+
+tourTrigger?.addEventListener("click", () => {
+  if (tourTrigger.getAttribute("aria-pressed") === "true") stopTour();
+  else startTour();
 });
 
 const animatedElements = document.querySelectorAll(
-  ".section-label, .section-heading, .profile-grid, .timeline-item, .project-card, .skill-groups article, .working-style, .contact > *"
+  ".section-label, .section-heading, .profile-grid, .hobby-grid > *, .timeline-item, .project-card, .skill-groups article, .working-style, .contact > *"
 );
 animatedElements.forEach((element, index) => {
   element.classList.add("reveal");
