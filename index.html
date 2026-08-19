@@ -6,6 +6,12 @@
   <meta name="theme-color" content="#f5f2eb">
   <meta name="description" content="Portfolio von Yucan You aus Aarau – Projekte, Kenntnisse, Interessen und Kontakt.">
   <title>Yucan You — IMS Portfolio</title>
+  <script>
+    try {
+      const savedTheme = localStorage.getItem("portfolio-theme");
+      if (savedTheme === "light" || savedTheme === "dark") document.documentElement.dataset.theme = savedTheme;
+    } catch (_) {}
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
@@ -27,7 +33,7 @@
         <span class="tour-trigger-copy"><small>Geführte Tour</small><strong class="tour-trigger-label">Entdecken</strong></span>
         <span class="tour-trigger-arrow" aria-hidden="true">→</span>
       </button>
-      <a class="header-contact" href="mailto:yucan.you100223@outlook.de">Schreib mir</a>
+      <a class="header-contact" href="mailto:yucanyou@icloud.com">Schreib mir</a>
     </div>
   </header>
 
@@ -100,12 +106,18 @@
           <p>Mit der Kamera halte ich Momente, Licht und Perspektiven fest, die im Alltag leicht übersehen werden. Fotografie ist für mich ein kreativer Ausgleich zum Programmieren und schärft meinen Blick für Bildaufbau, Farben und Details.</p>
           <p>Meine Motive reichen vom Plane Spotting bis zur Automotive-Fotografie. Besonders interessiert mich, wie ein anderer Ausschnitt, ein neuer Blickwinkel oder verändertes Licht dieselbe Szene völlig neu erzählen kann.</p>
         </div>
-        <figure class="photography-hero reveal" data-photo-hero>
+        <figure class="photography-hero caption-outside reveal" data-photo-hero>
           <img src="images/photography-main.jpg" alt="Eine Korean-Air-Maschine vor einem SWISS-Flugzeug am Flughafen" loading="lazy" decoding="async" data-photo-image>
           <figcaption>
             <span data-photo-meta>Spotting / Flughafen Zürich</span>
             <strong data-photo-caption>Korean Air und SWISS am Flughafen Zürich.</strong>
           </figcaption>
+          <div class="photo-carousel-controls" role="group" aria-label="Fotogalerie steuern">
+            <button type="button" data-photo-previous aria-label="Vorheriges Foto">←</button>
+            <button type="button" data-photo-pause aria-label="Automatischen Bildwechsel pausieren" aria-pressed="false">Pause</button>
+            <span class="photo-counter" data-photo-counter aria-live="polite">01 / 16</span>
+            <button type="button" data-photo-next aria-label="Nächstes Foto">→</button>
+          </div>
         </figure>
         <div class="hobby-controls">
           <div class="theme-joke">
@@ -134,7 +146,7 @@
       <div class="section-label">03 / Projekte</div>
       <div class="section-heading">
         <div><p class="eyebrow">Ausgewählte Arbeiten</p><h2>Von Robotik bis Web.</h2></div>
-        <p>Vier Projekte, an denen ich technische Grundlagen praktisch angewendet und eigene Ideen umgesetzt habe.</p>
+        <p>Fünf Projekte, an denen ich technische Grundlagen praktisch angewendet und eigene Ideen umgesetzt habe.</p>
       </div>
       <div class="project-list" id="projectList"></div>
     </section>

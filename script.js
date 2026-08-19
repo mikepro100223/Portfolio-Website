@@ -3,6 +3,9 @@ const projects = [
     title: "EV3-Roboter",
     summary: "Ein programmierter Roboter, der Linien folgt, Hindernissen ausweicht und Aufgaben mit einem Kranarm löst.",
     description: "Für dieses laufende Robotikprojekt programmiere ich einen Lego-EV3-Roboter mit Python. Ich entwickle und teste schrittweise Funktionen für Linienverfolgung, Hinderniserkennung und Bewegungsabläufe. Aktuell arbeite ich an einem Kranarm, der Hindernisse aus dem Weg räumen kann. Dabei lerne ich besonders viel über Sensorik, Fehlersuche und das Zusammenspiel von Hard- und Software.",
+    contribution: "Programmierung, Tests und schrittweise Integration der Sensor- und Bewegungsfunktionen.",
+    challenge: "Sensorwerte zuverlässig in Fahrbewegungen zu übersetzen und mehrere Teilfunktionen stabil zusammenzuführen.",
+    result: "Linienverfolgung und Hinderniserkennung sind umgesetzt; der Kranarm wird als nächste Funktion iterativ ergänzt.",
     technologies: ["Python", "Lego EV3", "Robotik"], duration: "Laufendes Projekt",
     videoId: "OKg1xoUKLe8", youtubeUrl: "https://youtu.be/OKg1xoUKLe8", githubUrl: "https://github.com/mikepro100223/automated_car"
   },
@@ -10,13 +13,29 @@ const projects = [
     title: "Smarte Lagerverwaltung",
     summary: "Hackathon-Prototyp zur Erkennung von Lagerbeständen mit Kamera und YOLOv8.",
     description: "Beim Hackathon Baden Hackt 2026 entwickelte ich in einem Zweierteam innerhalb von zwei Tagen einen funktionierenden Prototyp. Eine Kamera erkennt Objekte im Lager; die Anwendung aktualisiert daraus den Bestand und kann bei knappem Vorrat eine E-Mail auslösen. Ich war an Konzeption, Bilderkennung und Umsetzung beteiligt. Das Projekt hat mir gezeigt, wie wichtig klare Aufgabenverteilung und schnelle Tests unter Zeitdruck sind.",
+    contribution: "Konzeption, Bilderkennung und technische Umsetzung in einem Zweierteam.",
+    challenge: "Kamera, YOLOv8, Bestandslogik und Benachrichtigung innerhalb von zwei Tagen zu einem Ablauf zu verbinden.",
+    result: "Ein funktionsfähiger Prototyp erkennt Lagerobjekte, aktualisiert den Bestand und kann bei knappem Vorrat eine E-Mail auslösen.",
     technologies: ["Python", "YOLOv8", "Computer Vision"], duration: "2 Tage · Teamprojekt",
     videoId: "3_DIj80E2vQ", youtubeUrl: "https://www.youtube.com/watch?v=3_DIj80E2vQ", githubUrl: "https://github.com/mikepro100223/KI-Lagerhaltungs-System"
+  },
+  {
+    title: "TastyTracker",
+    summary: "Eine responsive Rezeptverwaltung mit Anmeldung, Suche und vollständigen CRUD-Funktionen.",
+    description: "TastyTracker entstand im Rahmen des Moduls 294 als Single-Page-Anwendung zur Verwaltung eigener Rezepte. Ich habe eine Registrierung und Anmeldung mit JWT-Authentifizierung, eine geschützte Rezeptübersicht sowie Funktionen zum Erstellen, Bearbeiten und Löschen umgesetzt. Rezepte lassen sich nach Titel, Zutaten oder Schwierigkeitsgrad durchsuchen. Ein Dashboard mit Statistiken, verständliche Lade- und Fehlerzustände sowie Tests mit Selenium IDE runden das Projekt ab.",
+    contribution: "Frontend-Entwicklung, REST-API-Anbindung, Authentifizierung und Oberflächentests.",
+    challenge: "Geschützte Ansichten, CRUD-Aktionen sowie Lade- und Fehlerzustände in einer konsistenten Single-Page-Anwendung abzubilden.",
+    result: "Ein durchgängiger Ablauf von Registrierung und Anmeldung bis zur durchsuchbaren Rezeptverwaltung mit Dashboard und Selenium-IDE-Tests.",
+    technologies: ["JavaScript", "REST API", "JWT"], duration: "Schulprojekt · Modul 294", imageUrl: "images/TastyTracker.png",
+    githubUrl: "https://github.com/mikepro100223/TastyTracker"
   },
   {
     title: "Snake im Game-Boy-Stil",
     summary: "Ein responsives Browser-Spiel mit eigener Steuerung und einer Benutzeroberfläche im Retro-Look.",
     description: "Ich habe das klassische Snake-Spiel als Webanwendung umgesetzt und die Oberfläche an einen Game Boy angelehnt. Neben der Spiellogik lag mein Fokus auf einer Steuerung, die sowohl mit Tastatur als auch auf mobilen Geräten funktioniert. Das Projekt hat meine Kenntnisse im Umgang mit JavaScript-Events, Zuständen und responsivem CSS vertieft.",
+    contribution: "Konzeption, Spiellogik, Game-Boy-Oberfläche und responsive Steuerung.",
+    challenge: "Tastatur- und Touch-Eingaben in einem gemeinsamen Spielzustand zuverlässig zu verarbeiten.",
+    result: "Ein online spielbares Snake, das auf Desktop und Smartphone bedienbar ist und den Retro-Look konsequent umsetzt.",
     technologies: ["HTML", "CSS", "JavaScript"], duration: "Eigenprojekt", imageUrl: "images/Snake.png",
     githubUrl: "https://github.com/mikepro100223/snake", liveUrl: "https://yucansnake.netlify.app/"
   },
@@ -24,6 +43,9 @@ const projects = [
     title: "Minesweeper",
     summary: "Das Logikspiel als responsive Web-App mit klarer Bedienung für Desktop und Smartphone.",
     description: "Bei meiner Minesweeper-Version habe ich das Spielfeld, die Zufallsverteilung der Minen und die Auswertung der Spielzüge selbst programmiert. Besondere Aufmerksamkeit galt einer verständlichen Oberfläche und der Bedienbarkeit auf kleinen Bildschirmen. So konnte ich Logik, DOM-Manipulation und responsives Design in einem kompakten Projekt verbinden.",
+    contribution: "Konzeption, Spiellogik, DOM-Umsetzung und responsive Benutzeroberfläche.",
+    challenge: "Zufällige Minenverteilung, Feldzustände und Spielauswertung verständlich und fehlerfrei miteinander zu verbinden.",
+    result: "Eine online spielbare Web-App mit klarer Bedienung für Desktop und Smartphone.",
     technologies: ["HTML", "CSS", "JavaScript"], duration: "Eigenprojekt", imageUrl: "images/MineSweeper.png",
     githubUrl: "https://github.com/mikepro100223/Minesweeper", liveUrl: "https://yucanminesweeper.netlify.app/"
   }
@@ -34,12 +56,16 @@ const dialog = document.querySelector("#projectDialog");
 const projectDetail = document.querySelector("#projectDetail");
 const tags = items => items.map(item => `<span class="tag">${item}</span>`).join("");
 
-projectList.innerHTML = projects.map((project, index) => `
-  <button class="project-card reveal" type="button" data-project="${index}" aria-label="Details zu ${project.title} öffnen">
-    <span class="project-index">0${index + 1}</span><h3>${project.title}</h3>
-    <p>${project.summary}</p><span class="tags">${tags(project.technologies)}</span>
+projectList.innerHTML = projects.map((project, index) => {
+  const thumbnailUrl = project.imageUrl || `https://i.ytimg.com/vi/${project.videoId}/hqdefault.jpg`;
+  const thumbnailType = project.videoId ? "Video" : "Screenshot";
+  return `<button class="project-card reveal" type="button" data-project="${index}" aria-label="Details zu ${project.title} öffnen">
+    <span class="project-index">0${index + 1}</span>
+    <span class="project-thumbnail ${project.imageUrl ? "is-screenshot" : "is-video"}"><img src="${thumbnailUrl}" alt="" loading="lazy" decoding="async"><span>${thumbnailType}</span></span>
+    <h3>${project.title}</h3><p>${project.summary}</p><span class="tags">${tags(project.technologies)}</span>
     <span class="project-arrow" aria-hidden="true">↗</span>
-  </button>`).join("");
+  </button>`;
+}).join("");
 
 function showProject(index) {
   const project = projects[index];
@@ -61,7 +87,13 @@ function showProject(index) {
   ].join("");
   projectDetail.innerHTML = `${media}<div class="dialog-body">
     <p class="eyebrow">Projekt 0${index + 1}</p><h2 id="dialogTitle">${project.title}</h2>
-    <p>${project.description}</p><div class="dialog-meta">${tags([...project.technologies, project.duration])}</div>
+    <p>${project.description}</p>
+    <dl class="project-case-study">
+      <div><dt>Mein Beitrag</dt><dd>${project.contribution}</dd></div>
+      <div><dt>Herausforderung</dt><dd>${project.challenge}</dd></div>
+      <div><dt>Ergebnis</dt><dd>${project.result}</dd></div>
+    </dl>
+    <div class="dialog-meta">${tags([...project.technologies, project.duration])}</div>
     <div class="dialog-links">${links}</div></div>`;
   dialog.showModal();
 }
@@ -97,6 +129,11 @@ focusDial?.addEventListener("click", () => {
 const themeToggle = document.querySelector("#themeToggle");
 const themeToggleText = themeToggle?.querySelector(".theme-toggle-text");
 const systemTheme = window.matchMedia("(prefers-color-scheme: dark)");
+const themeStorageKey = "portfolio-theme";
+
+function saveTheme(theme) {
+  try { localStorage.setItem(themeStorageKey,theme); } catch (_) {}
+}
 
 function getActiveTheme() {
   return document.documentElement.dataset.theme || (systemTheme.matches ? "dark" : "light");
@@ -110,7 +147,9 @@ function updateThemeButton() {
 }
 
 themeToggle?.addEventListener("click", () => {
-  document.documentElement.dataset.theme = getActiveTheme() === "dark" ? "light" : "dark";
+  const nextTheme = getActiveTheme() === "dark" ? "light" : "dark";
+  document.documentElement.dataset.theme = nextTheme;
+  saveTheme(nextTheme);
   document.body.classList.remove("theme-changing");
   void document.body.offsetWidth;
   document.body.classList.add("theme-changing");
@@ -118,8 +157,7 @@ themeToggle?.addEventListener("click", () => {
 });
 
 const handleSystemThemeChange = () => {
-  delete document.documentElement.dataset.theme;
-  updateThemeButton();
+  if (!document.documentElement.dataset.theme) updateThemeButton();
 };
 
 if (systemTheme.addEventListener) {
@@ -134,6 +172,10 @@ const photoHero = document.querySelector("[data-photo-hero]");
 const photoHeroImage = photoHero?.querySelector("[data-photo-image]");
 const photoHeroMeta = photoHero?.querySelector("[data-photo-meta]");
 const photoHeroCaption = photoHero?.querySelector("[data-photo-caption]");
+const photoPrevious = photoHero?.querySelector("[data-photo-previous]");
+const photoNext = photoHero?.querySelector("[data-photo-next]");
+const photoPause = photoHero?.querySelector("[data-photo-pause]");
+const photoCounter = photoHero?.querySelector("[data-photo-counter]");
 const photoSlides = [
   {
     src: "images/photography-main.jpg",
@@ -164,24 +206,94 @@ const photoSlides = [
     src: "images/gallery/DSC01179.jpg",
     alt: "Ein goldener Lamborghini Aventador SVJ auf einer Strasse",
     meta: "Automotive / Lamborghini",
-    caption: "Aventador SVJ",
-    captionTop: true
+    caption: "Aventador SVJ"
+  },
+  {
+    src: "images/gallery/DSC00067.jpg",
+    alt: "Ein Austrian-Flugzeug im Vordergrund und eine SWISS-Langstreckenmaschine auf dem Rollfeld",
+    meta: "Spotting / Flughafen Zürich",
+    caption: "Austrian und SWISS auf dem Rollfeld."
+  },
+  {
+    src: "images/gallery/DSC00078.jpg",
+    alt: "Ein Edelweiss Airbus A320neo mit grosser Edelweissblüte auf dem Leitwerk",
+    meta: "Spotting / Edelweiss",
+    caption: "Edelweiss A320neo beim Rollen in Zürich."
+  },
+  {
+    src: "images/gallery/DSC00095.jpg",
+    alt: "Eine SWISS Boeing 777 setzt mit Reifenrauch auf der Landebahn auf",
+    meta: "Spotting / Landung Zürich",
+    caption: "Touchdown einer SWISS Boeing 777."
+  },
+  {
+    src: "images/gallery/DSC00120.jpg",
+    alt: "Ein Airbus von ITA Airways in dunkelblauer Lackierung rollt vor einem Pegasus-Flugzeug",
+    meta: "Spotting / ITA Airways",
+    caption: "ITA Airways in dunkelblauer Lackierung."
+  },
+  {
+    src: "images/gallery/DSC00197.jpg",
+    alt: "Ein British-Airways-Embraer im Landeanflug vor den Häusern von Kloten",
+    meta: "Spotting / Anflug Zürich",
+    caption: "British Airways kurz vor der Landung."
+  },
+  {
+    src: "images/gallery/DSC00247.jpg",
+    alt: "Ein airBaltic Airbus A220 in einer farbigen Speziallackierung auf dem Rollfeld",
+    meta: "Spotting / airBaltic",
+    caption: "Airbus A220 in besonderer Lettland-Lackierung."
+  },
+  {
+    src: "images/gallery/DSC00493.jpg",
+    alt: "Ein blauer Ford GT40 mit weissen Rennstreifen vor einer hellen Hallenwand",
+    meta: "Automotive / Ford",
+    caption: "Ford GT40 in klassischem Blau."
+  },
+  {
+    src: "images/gallery/DSC00577.jpg",
+    alt: "Ein Ferrari 296 GT3 mit farbiger Rennlackierung in einer Werkstatt",
+    meta: "Motorsport / Ferrari",
+    caption: "Ferrari 296 GT3 in markanter Rennlackierung."
+  },
+  {
+    src: "images/gallery/DSC00675.jpg",
+    alt: "Ein roter Mercedes-AMG PureSpeed mit offenem Cockpit in einer Ausstellungshalle",
+    meta: "Automotive / Mercedes-AMG",
+    caption: "Mercedes-AMG PureSpeed ohne Dach und Windschutzscheibe."
+  },
+  {
+    src: "images/gallery/DSC01078.jpg",
+    alt: "Ein cyanfarbener Porsche 911 GT3 Touring von vorne auf einem Parkplatz",
+    meta: "Automotive / Porsche",
+    caption: "Porsche 911 GT3 Touring in Cyan."
+  },
+  {
+    src: "images/gallery/DSC01120.jpg",
+    alt: "Ein mattgrüner Porsche 911 GT3 RS Manthey mit grossem Heckflügel in einer Halle",
+    meta: "Automotive / Porsche",
+    caption: "Porsche 911 GT3 RS Manthey in mattem Grün."
   }
 ];
+const mixedPhotoOrder = [0,2,5,11,1,12,6,13,7,3,8,14,9,15,10,4];
+photoSlides.splice(0,photoSlides.length,...mixedPhotoOrder.map(index => photoSlides[index]));
+if (photoCounter) photoCounter.textContent = `01 / ${String(photoSlides.length).padStart(2,"0")}`;
 let photoSlideIndex = 0;
 let photoRotation;
+let photoChangeTimer;
 let photoRotationPaused = false;
+let photoRotationHovered = false;
 
-function showNextPhoto() {
+function showPhoto(index) {
   if (!photoHeroImage || document.hidden) return;
+  window.clearTimeout(photoChangeTimer);
   photoHero.classList.add("is-changing");
   photoHeroImage.classList.add("is-changing");
-  window.setTimeout(() => {
-    photoSlideIndex = (photoSlideIndex + 1) % photoSlides.length;
+  photoChangeTimer = window.setTimeout(() => {
+    photoSlideIndex = (index + photoSlides.length) % photoSlides.length;
     const slide = photoSlides[photoSlideIndex];
     photoHeroImage.src = slide.src;
     photoHeroImage.alt = slide.alt;
-    photoHero.classList.toggle("caption-top",Boolean(slide.captionTop));
     photoHeroMeta.textContent = slide.meta;
     photoHeroCaption.textContent = "";
     if (slide.desktopCaptionLines) {
@@ -192,17 +304,35 @@ function showNextPhoto() {
     } else {
       photoHeroCaption.textContent = slide.caption;
     }
+    if (photoCounter) photoCounter.textContent = `${String(photoSlideIndex + 1).padStart(2,"0")} / ${String(photoSlides.length).padStart(2,"0")}`;
     const imageReady = photoHeroImage.decode ? photoHeroImage.decode() : Promise.resolve();
     imageReady.catch(() => {}).finally(() => {
       photoHero.classList.remove("is-changing");
       photoHeroImage.classList.remove("is-changing");
+      preloadPhoto(photoSlideIndex + 1);
     });
   },450);
 }
 
+function showNextPhoto() { showPhoto(photoSlideIndex + 1); }
+function showPreviousPhoto() { showPhoto(photoSlideIndex - 1); }
+
+function preloadPhoto(index) {
+  const slide = photoSlides[(index + photoSlides.length) % photoSlides.length];
+  const preload = new Image();
+  preload.src = slide.src;
+}
+
+function updatePhotoPauseButton() {
+  if (!photoPause) return;
+  photoPause.textContent = photoRotationPaused ? "Weiter" : "Pause";
+  photoPause.setAttribute("aria-pressed",String(photoRotationPaused));
+  photoPause.setAttribute("aria-label",photoRotationPaused ? "Automatischen Bildwechsel fortsetzen" : "Automatischen Bildwechsel pausieren");
+}
+
 function startPhotoRotation(delay = 5000) {
   window.clearTimeout(photoRotation);
-  if (photoRotationPaused) return;
+  if (photoRotationPaused || photoRotationHovered) return;
   photoRotation = window.setTimeout(() => {
     showNextPhoto();
     startPhotoRotation();
@@ -210,19 +340,30 @@ function startPhotoRotation(delay = 5000) {
 }
 
 if (photoHeroImage && photoSlides.length > 1) {
-  photoSlides.slice(1).forEach(slide => {
-    const preload = new Image();
-    preload.src = slide.src;
-  });
+  preloadPhoto(1);
   startPhotoRotation(2500);
+  photoPrevious?.addEventListener("click", () => {
+    showPreviousPhoto();
+    startPhotoRotation();
+  });
+  photoNext?.addEventListener("click", () => {
+    showNextPhoto();
+    startPhotoRotation();
+  });
+  photoPause?.addEventListener("click", () => {
+    photoRotationPaused = !photoRotationPaused;
+    updatePhotoPauseButton();
+    if (photoRotationPaused) window.clearTimeout(photoRotation);
+    else startPhotoRotation();
+  });
   const canPausePhotoRotation = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
   if (canPausePhotoRotation) {
     photoHero.addEventListener("pointerenter", () => {
-      photoRotationPaused = true;
+      photoRotationHovered = true;
       window.clearTimeout(photoRotation);
     });
     photoHero.addEventListener("pointerleave", () => {
-      photoRotationPaused = false;
+      photoRotationHovered = false;
       startPhotoRotation();
     });
   }
